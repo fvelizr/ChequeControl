@@ -19,9 +19,16 @@ La estructura de directorios es esta:
 La aplicación utiliza el modrewrite de apache para tener las url más amigables y se apunta a el directorio public para mayor seguridad, ocultando la lógica del exterior manteniendo solo acceso a este directorio (public), el cual se utiliza para tener los archivos de estilos, javascript entre otros publicamente.
 
 ### Instalación
-Para instalarlo necesitas descargarlo o clonarlo desde [Github](https://github.com/Phoenix2140/plantilla-mvc), seguiremos los pasos de instalación desde linux (debian/ubuntu).
+Para instalarlo necesitas descargarlo o clonarlo desde [Github](https://github.com/Phoenix2140/plantilla-mvc), seguiremos los pasos de instalación desde linux (debian/ubuntu). Esta es la version original.
 
-Luego necesitas configurar un VirtualHost en apache, editando por ejemplo  /etc/apache2/sites-available/mcv.dev.conf , siguiendo los pasos a consinuación:
+El repositorio actual, es para un proyecto de UMG, ESCUINTLA.
+
+Luego necesitas configurar un VirtualHost en apache y habilitar el module_rewrite, editando por ejemplo  /etc/apache2/sites-available/mcv.dev.conf , siguiendo los pasos a consinuación:
+
+Buscamos en nuestro archivo la siguiente linea y le quitamos el simbolo #
+
+#LoadModule rewrite_module modules/mod_rewrite.so
+
 
 ```sh
 <VirtualHost *:80>
@@ -33,7 +40,8 @@ Luego necesitas configurar un VirtualHost en apache, editando por ejemplo  /etc/
         ServerAdmin webmaster@localhost
         #Document Root y Directory deben apuntar con la dirección total a la 
         #carpeta public dentro de mvc
-        DocumentRoot /var/www/html/mvc/public
+        #Cambiar la /var/www/html/mvc/public por la direccion de su servidor 
+        DocumentRoot /var/www/html/mvc/public 
         <Directory /var/www/html/mvc/public>
                 Allow from all
                 Order allow,deny
@@ -42,12 +50,14 @@ Luego necesitas configurar un VirtualHost en apache, editando por ejemplo  /etc/
         </Directory>
 </VirtualHost>
 ```
-Luego como Root activamos el módulo modrewrite y la página
+Hacer este paso si usan linux: Root activamos el módulo modrewrite y la página
 ```sh
 $ a2enmod rewrite
 $ a2ensite mcv.dev.conf
 $ service apache2 restart
 ```
+
+SI NO USAN LINUX, REINICIEN EL SERVIDOR APACHE.
 
 ### Instalación alternativa
 Si tuvieron problemas con la instalación es posible lanzar un servidor directamente desde PHP, para hacerlo tienen que ir al directorio "public" dentro de la ruta de su proyecto, a continuación ejecutan el siguiente comando en el terminal ( desde la carpeta public ):

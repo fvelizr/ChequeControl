@@ -24,13 +24,13 @@ $config->set('viewsDir', APP_PATH . '/app/views/'); // Directorio de las vistas
 $config->set('baseDir', APP_PATH . '/app/base/'); // Directorio de las librerías base
 $config->set('configDir', APP_PATH . '/app/config/'); //Directorio de Configuraciones y cargadores
 $config->set('baseUri', '/'); // Directorio raíz de la aplicación
-$config->set('baseUrl', 'http://mvc.dev'); // Página web base a la que pertenece
+$config->set('baseUrl', 'chequecontro.com'); // Página web base a la que pertenece
  
-$config->set('adapter', 'mysql'); // Driver de base de datos (puede cambiar a los drives que se mencionan en config/loader.php)
+$config->set('adapter', 'Oracle'); // Driver de base de datos (puede cambiar a los drives que se mencionan en config/loader.php)
 $config->set('host', 'localhost'); // Dirección del servidor de la Base de datos
 $config->set('username', 'root'); // Usuario de la Base de datos
-$config->set('password', 'phnx'); // Contraseña de la base de datos
-$config->set('dbname', 'tabla'); // Nombre de la base de datos
+$config->set('password', '12345678'); // Contraseña de la base de datos
+$config->set('dbname', 'chequecontrol'); // Nombre de la base de datos
 $config->set('charset', 'utf8'); // Codificación de la base de datos
 
 return $config;

@@ -25,7 +25,7 @@
 	 	*/
 	    public function __construct($config){
 	        // Set DSN
-	        $dsn = $config->get('adapter').':host=' . $config->get('host') . ';dbname=' . $config->get('dbname');
+	        $dsn = $config->get('adapter').':dbname=' . $config->get('dbname');
 	        // Set options
 	        $options = array(
 	            PDO::ATTR_PERSISTENT    => true,

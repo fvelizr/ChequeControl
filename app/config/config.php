@@ -21,17 +21,32 @@ $config = Config::singleton();
 $config->set('controllersDir', APP_PATH . '/app/controllers/'); //Directorio de los controladores
 $config->set('modelsDir', APP_PATH . '/app/models/'); // Directorio de los Modelos
 $config->set('viewsDir', APP_PATH . '/app/views/'); // Directorio de las vistas
+$config->set('viewsDirCss', APP_PATH . '/app/views/css'); // Directorio de las vistas
 $config->set('baseDir', APP_PATH . '/app/base/'); // Directorio de las librerías base
 $config->set('configDir', APP_PATH . '/app/config/'); //Directorio de Configuraciones y cargadores
 $config->set('baseUri', '/'); // Directorio raíz de la aplicación
-$config->set('baseUrl', 'chequecontro.com'); // Página web base a la que pertenece
+$config->set('baseUrl', 'chequecontrol.com'); // Página web base a la que pertenece
  
-$config->set('adapter', 'Oracle'); // Driver de base de datos (puede cambiar a los drives que se mencionan en config/loader.php)
+$config->set('adapter', 'oci'); // Driver de base de datos (puede cambiar a los drives que se mencionan en config/loader.php)
 $config->set('host', 'localhost'); // Dirección del servidor de la Base de datos
-$config->set('username', 'root'); // Usuario de la Base de datos
-$config->set('password', '12345678'); // Contraseña de la base de datos
-$config->set('dbname', 'chequecontrol'); // Nombre de la base de datos
-$config->set('charset', 'utf8'); // Codificación de la base de datos
+$config->set('username', 'prueba'); // Usuario de la Base de datos
+$config->set('password', 'prueba'); // Contraseña de la base de datos
+//$config->set('dbname', '//localhost:1521/XE'); // Nombre de la base de datos
+$config->set('dbname', '//localhost:1521/XE'); // Nombre de la base de datos
+//$config->set('charset', 'utf8'); // Codificación de la base de datos
+
+$config->set('max_time_session',900);
+
+/*
+Se inicia la sesion para que el sistema.
+*/
+session_start();
+
+/**
+ * Asigna la zona horaria predeterminada del servidor
+ */
+
+date_default_timezone_set('UTC');
 
 return $config;
 ?>

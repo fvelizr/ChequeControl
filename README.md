@@ -97,18 +97,18 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `tabla`
 --
 
-CREATE TABLE IF NOT EXISTS `tabla` (
-`id` int(11) NOT NULL,
-  `nombre` varchar(55) COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE  tabla (
+id int NOT NULL,
+  nombre varchar(55) NOT NULL
+);
 
 --
 -- Volcado de datos para la tabla `tabla`
 --
 
-INSERT INTO `tabla` (`id`, `nombre`) VALUES
-(1, 'hola'),
-(2, 'mundo');
+INSERT INTO tabla (id, nombre) VALUES
+(1, 'hola');
+INSERT INTO tabla (id, nombre) VALUES(2, 'mundo');
 
 --
 -- Índices para tablas volcadas

@@ -39,7 +39,7 @@
 			require($this->config->get('modelsDir').'Tabla.php');
 			$tabla = new Tabla($this->config);
 			$this->view->datos = $tabla->getTabla();
-			
+			//echo "hola";
 			/**
 			 * Se crean variables (titulo y mensaje) en la vista.
 			 */
@@ -50,7 +50,7 @@
 			 * Se crea una variable (especial) que contiene una vista
 			 * views/home.php, con los valores deseados
 			 */
-			$this->view->content = $this->view->render($this->config->get('viewsDir').'home.php');
+			//$this->view->content = $this->view->render($this->config->get('viewsDir').'home.php');
 
 			/**
 			 * Luego se genera y junta toda la vista en 
@@ -58,7 +58,8 @@
 			 * en su interior todas las variables creadas anteriormente
 			 * incluso la vista parcial home.php
 			 */
-			echo $this->view->render($this->config->get('viewsDir').'header.php');
+			//echo $this->view->render($this->config->get('viewsDir').'header.php');
+			echo json_encode($tabla->getTabla());
 
 
 		}

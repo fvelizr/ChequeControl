@@ -18,7 +18,6 @@ define('APP_PATH', realpath('..'));
 
 //En caso de cualquier error durante la carga se mostrará
 try {
-
     /**
      * Se carga el archivo principal de configuraciones
      * este archivo contiene los driver de base de datos, 

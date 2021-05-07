@@ -12,7 +12,34 @@
 	 * que son los métodos más utilizados, se pueden 
 	 * incorporar otros según se requiera.
 	 */
-	if($ruta->get() == 'GET'){
+	
+	if(isset($_SESSION["login_time"]) && (time()-$_SESSION['login_time'] > $config->get('max_time_session'))){ //Condicion para evitar que la session inactiva, tenga mas de 15 minutos
+		//Aqui hay que mostrar un alert y hacer la redireccion al inicio.
+		echo 'alert("Sesion expirada");';
+		session_destroy();
+		header('Location: ');
+		exit;
+	}else if(!isset($_SESSION["login_token"])){ 
+		/**
+		 * Condicion para validar que el usuario este logueado, si no esta logueado, no podra hacer absolutamente nada en el sistema.
+		 * Importante: cuando ya este la vista y la base de datos hay que modificar las funciones de verificarDatos para que haga las consultas a la base de datos.
+		 */
+		$enlace = $ruta->enlace(); //Se utiliza para setear la url
+		switch ($enlace[1]){
+			case 'verificarDatos':
+				require_once($config->get('controllersDir').'Pruebas.php');
+				$Pruebas = new Pruebas($config);
+				return $Pruebas->verificarDatos();
+				break;
+
+			default:
+				require_once($config->get('controllersDir').'Pruebas.php');
+				$Pruebas = new Pruebas($config);
+				return $Pruebas->mostrarFormularioLogin();
+				break;
+		}
+		
+	}else if($ruta->get() == 'GET'){
 
 		/**
 		 * Se obtiene el enlace de la dirección web y se divide
@@ -36,8 +63,26 @@
 		/**
 		 * El Switch utiliza una accion dependiendo de la ruta.
 		 */
+		
 		switch ($enlace[1]){
+			/**
+			 * Ruta para hacer el logout, pendiente de validar el cerrado de session
+			 */
+			case 'resetLogin':
+				if(isset($_SESSION['login_token'])){
+					session_destroy();
+					header('Refresh: 1;');
+					exit;
+				}
+				break;
+				
 			case '':
+				echo 'Bienvenido';
+				break;
+			case 'verificarDatos':
+				
+				break;
+			case 'home':
 				/**
 				 * Se llama y se crea un objeto de la clase Home 
 				 * para este ejemplo
@@ -61,10 +106,25 @@
 			
 			default:
 				# code...
+				echo "ERROR 404: NOT FOUND";
 				break;
 		}
 
 	}elseif($ruta->get() == 'POST'){
+		switch($_POST['solicitud']){
+			case 'crearToken':
+				require_once($config->get('controllersDir').'Login.php');
+				$controlador = new Login($config);
+				echo $controlador->crearToken(2);
+				break;
+	
+			case 'verificarToken':
+				require_once($config->get('controllersDir').'Login.php');
+				$controlador = new Login($config);
+				return $controlador->verificarToken(1);
+				break;
+		}
+		
 		/**
 		 * No está implementado, pero es similar a los pasos del
 		 * Método GET con el switch

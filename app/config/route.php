@@ -26,21 +26,20 @@
 		 */
 		$enlace = $ruta->enlace(); //Se utiliza para setear la url
 		switch ($enlace[1]){
-			case 'verificarDatos':
-				require_once($config->get('controllersDir').'Pruebas.php');
-				$Pruebas = new Pruebas($config);
-				return $Pruebas->verificarDatos();
+			case 'validarIngreso':
+				require_once($config->get('controllersDir').'Validacion.php');
+				$Validacion = new Validacion($config);
+				echo $Validacion->validarIngreso();
 				break;
 
 			default:
-				require_once($config->get('controllersDir').'Pruebas.php');
-				$Pruebas = new Pruebas($config);
-				return $Pruebas->mostrarFormularioLogin();
+				require_once($config->get('controllersDir').'Validacion.php');
+				$Validacion = new Validacion($config);
+				return $Validacion->indexAction();
 				break;
 		}
 		
 	}else if($ruta->get() == 'GET'){
-
 		/**
 		 * Se obtiene el enlace de la dirección web y se divide
 		 * para poder tratarlas con un switch.
@@ -68,20 +67,21 @@
 			/**
 			 * Ruta para hacer el logout, pendiente de validar el cerrado de session
 			 */
-			case 'resetLogin':
+			case 'salir':
 				if(isset($_SESSION['login_token'])){
 					session_destroy();
-					header('Refresh: 1;');
+					header('Location: /');
 					exit;
 				}
 				break;
-				
+
 			case '':
-				echo 'Bienvenido';
-				break;
-			case 'verificarDatos':
-				
-				break;
+			case 'inicio':{
+				require_once($config->get('controllersDir').'Inicio.php');
+				$inicio = new Inicio($config);
+				return $inicio->indexAction();
+			}
+
 			case 'home':
 				/**
 				 * Se llama y se crea un objeto de la clase Home 

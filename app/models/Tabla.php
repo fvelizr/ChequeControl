@@ -20,9 +20,10 @@
 		 * tabla de la base de datos "Tabla"
 		 */
 		public function getTabla(){
-			$this->db->query("SELECT * FROM tabla");
+			return $this->db;
+			//$this->db->query("SELECT * FROM tabla");
 
-			return $this->db->resultSet();
+			//return $this->db->resultSet();
 		}
 
 		/**

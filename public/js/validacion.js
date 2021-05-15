@@ -2,6 +2,26 @@ document.onreadystatechange = function () { //Al cargar el documento
 
 }
 
+function prueba(){
+    console.log('prueba');
+}
+
+function limpiarFrmUsuario(){
+    document.getElementById('id_usuario').value = 0;
+    document.getElementById('grupo').value = 0;
+    document.getElementById('usuario').value = '';
+    document.getElementById('contra').value = '';
+    document.getElementById('monto').value = '';
+    document.getElementById('cui').value = '';
+    document.getElementById('nombre1').value = '';
+    document.getElementById('nombre2').value = '';
+    document.getElementById('nombre3').value = '';
+    document.getElementById('apellido1').value = '';
+    document.getElementById('apellido2').value = '';
+    document.getElementById('fecha_nac').valu = '';
+    document.getElementById('fecha_creacion').value = '00-00-0000';
+}
+
 /**
  * 
  * @param {nombre de usuario} usuario 
@@ -39,4 +59,176 @@ function validarIngreso(){
         'usuario='+usuario.value+
         '&contra='+contra.value
     );
+}
+
+function frmUsuario(){
+    limpiarFrmUsuario();
+    $("#modal_usuario_edit").modal('show');
+    document.getElementById('btnGuardarUsuario').setAttribute('onclick', 'crearUsuario()');
+}
+
+/**
+ * 
+ * 
+ * 
+ */
+ function crearUsuario(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo != 200){
+                alert('No creado');
+            }else{
+                alert('Creado');
+            }
+            
+        }
+    };
+    console.log('grupo=' + document.getElementById('grupo').value+
+    '&usuario=' + document.getElementById('usuario').value+
+    '&contra=' + document.getElementById('contra').value+
+    '&monto=' + document.getElementById('monto').value+
+    '&cui=' + document.getElementById('cui').value+
+    '&nombre1=' + document.getElementById('nombre1').value+
+    '&nombre2=' + document.getElementById('nombre2').value+
+    '&nombre3=' + document.getElementById('nombre3').value+
+    '&apellido1=' + document.getElementById('apellido1').value+
+    '&apellido2=' + document.getElementById('apellido2').value+
+    '&fecha_nac=' + document.getElementById('fecha_nac').value);
+    xhttp.open('POST', '/usuarios', true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(
+        'grupo=' + document.getElementById('grupo').value+
+        '&usuario=' + document.getElementById('usuario').value+
+        '&contra=' + document.getElementById('contra').value+
+        '&monto=' + document.getElementById('monto').value+
+        '&cui=' + document.getElementById('cui').value+
+        '&nombre1=' + document.getElementById('nombre1').value+
+        '&nombre2=' + document.getElementById('nombre2').value+
+        '&nombre3=' + document.getElementById('nombre3').value+
+        '&apellido1=' + document.getElementById('apellido1').value+
+        '&apellido2=' + document.getElementById('apellido2').value+
+        '&fecha_nac=' + document.getElementById('fecha_nac').value
+    );
+}
+
+/**
+ * 
+ * Usuario formulario, muestra el formulario del usuario para ser editado.
+ * 
+ */
+ function usuarioEnForm(id){
+    limpiarFrmUsuario();
+    $("#modal_usuario_edit").modal('show');
+    document.getElementById('btnGuardarUsuario').setAttribute('onclick', 'guardarUsuario()');
+    var url = '<?php echo $url; ?>';
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            var objeto = (res.objeto[0])['informacion'];
+            var modulos = (res.objeto[0])['modulos'];
+            var privilegios = (res.objeto[0])['privilegios'];
+
+            if(res.codigo == 200){
+                console.log(res);
+                console.log(objeto);
+                //Usuario
+                document.getElementById('id_usuario').value = objeto.ID_USUARIO;
+                document.getElementById('grupo').value = objeto.ID_GRUPO;
+                document.getElementById('usuario').value = objeto.NOMBRE_USUARIO;
+                document.getElementById('contra').value = '';
+                document.getElementById('fecha_creacion').value = objeto.FECHA_CREACION;
+                document.getElementById('monto').value = objeto.MONTO;
+
+                //Personal
+                document.getElementById('cui').value = objeto.CUI;
+                document.getElementById('nombre1').value = objeto.PRIMER_NOMBRE;
+                document.getElementById('nombre2').value = objeto.SEGUNDO_NOMBRE;
+                document.getElementById('nombre3').value = objeto.OTRO_NOMBRE;
+                document.getElementById('apellido1').value = objeto.PRIMER_APELLIDO;
+                document.getElementById('apellido2').value = objeto.SEGUNDO_APELLIDO;
+                document.getElementById('fecha_nac').value = objeto.FECHA_NAC;
+
+                //Modulos
+                var frm = document.createElement('form');
+                $.each(modulos,function(index, value){
+                    var input = document.createElement('input');
+                    input.id = value['ID_MODULO'];
+                    input.name = value['ID_MODULO'];
+                    input.setAttribute('type','checkbox');
+                    input.className = 'form-control';
+                    input.value = value['ID_MODULO'];
+
+                    var colint = document.createElement('div');
+                    colint.className = 'col';
+                    colint.appendChild(input);
+
+                    var lbl = document.createElement('label');
+                    lbl.setAttribute('for',value['ID_MODULO']);
+                    lbl.innerText = value['NOMBRE'];
+
+                    var collbl = document.createElement('div');
+                    collbl.className = 'col';
+                    collbl.appendChild(lbl);
+
+                    var row = document.createElement('div');
+                    row.className = 'row';
+                    row.appendChild(collbl);
+                    row.appendChild(colint);
+
+                    var frmg = document.createElement('div');
+                    frmg.className = 'form-group';
+                    frmg.appendChild(row);
+                    frm.appendChild(frmg);
+                });
+                document.getElementById('modulos').innerHTML = '';
+                document.getElementById('modulos').appendChild(frm);
+                
+
+                //Privilegios
+                frm = document.createElement('form');
+                $.each(privilegios,function(index, value){
+                    var input = document.createElement('input');
+                    input.id = value['ID_PRIVILEGIO'];
+                    input.name = value['ID_PRIVILEGIO'];
+                    input.setAttribute('type','checkbox');
+                    input.className = 'form-control';
+                    input.value = value['ID_PRIVILEGIO'];
+
+                    var colint = document.createElement('div');
+                    colint.className = 'col';
+                    colint.appendChild(input);
+
+                    var lbl = document.createElement('label');
+                    lbl.setAttribute('for',value['ID_PRIVILEGIO']);
+                    lbl.innerText = value['NOMBRE'];
+
+                    var collbl = document.createElement('div');
+                    collbl.className = 'col';
+                    collbl.appendChild(lbl);
+
+                    var row = document.createElement('div');
+                    row.className = 'row';
+                    row.appendChild(collbl);
+                    row.appendChild(colint);
+
+                    var frmg = document.createElement('div');
+                    frmg.className = 'form-group';
+                    frmg.appendChild(row);
+                    frm.appendChild(frmg);
+                });
+                document.getElementById('privilegios').innerHTML = '';
+                document.getElementById('privilegios').appendChild(frm);
+            }else{
+                
+            }
+        }
+    };
+    console.log(id);
+    xhttp.open('GET', 'usuarios/'+id, true);
+    xhttp.send();
 }

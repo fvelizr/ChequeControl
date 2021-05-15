@@ -34,10 +34,12 @@
 	        // Create a new PDO instanace
 	        try{
 	            $this->dbh = new PDO($dsn, $config->get('username'), $config->get('password'), $options);
+				//return '<script>console.log("conexion exitosa");';
 	        }
 	        // Catch any errors
 	        catch(PDOException $e){
 	            $this->error = $e->getMessage();
+				//return '<script>console.log("'.$e->getMessage().'");';
 	        }
 	    }
 		
@@ -91,7 +93,15 @@
 			$this->execute();
 			return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
-
+		
+		/**
+		 * Devuelve la lista de todos los valores consultados
+		 * útil cuando se necesiten múltiples filas
+		 */
+		public function resultSetF(){
+			$this->execute();
+			return $this->stmt->fetchAll(PDO::FETCH_BOTH);
+		}
 		/**
 		 * Single obtiene solo una fila de la query y 
 		 * la transforma en array

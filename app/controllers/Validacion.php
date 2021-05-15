@@ -6,6 +6,7 @@
 		public function __construct($config){
 			$this->config = $config;
 
+            $_SESSION['login_time'] = time(); //Reinicia el tiempo de inactividad
 			require_once($this->config->get('baseDir').'Template.php');
 			$this->view = new Template();
 		}

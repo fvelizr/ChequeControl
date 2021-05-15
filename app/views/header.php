@@ -12,17 +12,20 @@ la Clase Template
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/colors.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css?v=<?php echo time();?>" />
+        <link rel="stylesheet" type="text/css" href="css/colors.css?v=<?php echo time();?>">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css?v=<?php echo time();?>">
+        
     </head>
 
     <body>
 
 	<?php echo $contenido; ?>
 
-	<script src="js/jquery-3.5.1.slim.min.js"
+    
+	<script src="js/jquery-3.5.1.slim.min.js?v=<?php echo time();?>"
             integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/validacion.js"></script>
+        <script src="js/bootstrap.min.js?v=<?php echo time();?>"></script>
+        <script src="js/validacion.js?v=<?php echo time();?>"></script>
     </body>
 </html>

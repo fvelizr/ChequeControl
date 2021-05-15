@@ -31,8 +31,8 @@ $config->set('baseUrl', 'chequecontrol.com'); // Página web base a la que perte
  
 $config->set('adapter', 'oci'); // Driver de base de datos (puede cambiar a los drives que se mencionan en config/loader.php)
 $config->set('host', 'localhost'); // Dirección del servidor de la Base de datos
-$config->set('username', 'prueba'); // Usuario de la Base de datos
-$config->set('password', 'prueba'); // Contraseña de la base de datos
+$config->set('username', 'edmundo'); // Usuario de la Base de datos
+$config->set('password', 'S0p42021'); // Contraseña de la base de datos
 $config->set('dbname', '//localhost:1521/XE'); // Nombre de la base de datos
 //$config->set('charset', 'utf8'); // Codificación de la base de datos
 

@@ -38,7 +38,7 @@
                     REPORTES
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a name="r1" class="dropdown-item" href="#">Reporte1</a>
+                    <a name="r1" class="dropdown-item" href="usuarios">Usuarios</a>
                     <a name="r2" class="dropdown-item" href="#">Reporte2</a>
                     <a name="r3" class="dropdown-item" href="#">Reporte3</a>
                 </div>

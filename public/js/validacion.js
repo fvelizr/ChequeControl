@@ -46,7 +46,7 @@ function validarIngreso(){
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
                 alerta.className = 'alert alert-success';
-                setTimeout(location.href = '/usuarios .', 10000);
+                setTimeout(location.href = '/usuarios', 10000);
                 //location.href = '/';
             }
             

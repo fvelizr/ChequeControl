@@ -18,7 +18,7 @@ function limpiarFrmUsuario(){
     document.getElementById('nombre3').value = '';
     document.getElementById('apellido1').value = '';
     document.getElementById('apellido2').value = '';
-    document.getElementById('fecha_nac').valu = '';
+    document.getElementById('fecha_nac').valu = '00-00-0000';
     document.getElementById('fecha_creacion').value = '00-00-0000';
 }
 
@@ -41,6 +41,7 @@ function validarIngreso(){
             if(res.codigo != 200){
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
+                setTimeout(location.href = '/', 10000);
             }else{
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
@@ -78,10 +79,12 @@ function frmUsuario(){
         if (this.readyState == 4 && this.status == 200) {
             var res = JSON.parse(this.responseText);
             console.log(res);
-            if(res.codigo != 200){
-                alert('No creado');
+            if(res.codigo == 200){
+                limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/usuarios', 10000);
             }else{
-                alert('Creado');
+                alert('ERROR '+res.codigo+': '+res.mensaje);
             }
             
         }
@@ -114,6 +117,80 @@ function frmUsuario(){
     );
 }
 
+function guardarUsuario(){
+    var xhttp = new XMLHttpRequest();
+
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/usuarios', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+    
+    console.log(
+    '&usuario=' + document.getElementById('usuario').value+
+    '&contra=' + document.getElementById('contra').value+
+    '&monto=' + document.getElementById('monto').value+
+    '&cui=' + document.getElementById('cui').value+
+    '&nombre1=' + document.getElementById('nombre1').value+
+    '&nombre2=' + document.getElementById('nombre2').value+
+    '&nombre3=' + document.getElementById('nombre3').value+
+    '&apellido1=' + document.getElementById('apellido1').value+
+    '&apellido2=' + document.getElementById('apellido2').value+
+    '&fecha_nac=' + document.getElementById('fecha_nac').value);
+    xhttp.open('PUT', '/usuarios', true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(
+        'usuario=' + document.getElementById('usuario').value+ 
+        '&id_usuario=' + document.getElementById('id_usuario').value+
+        '&grupo=' + document.getElementById('grupo').value+
+        '&contra=' + document.getElementById('contra').value+
+        '&monto=' + document.getElementById('monto').value+
+        '&nombre1=' + document.getElementById('nombre1').value+
+        '&nombre2=' + document.getElementById('nombre2').value+
+        '&nombre3=' + document.getElementById('nombre3').value+
+        '&apellido1=' + document.getElementById('apellido1').value+
+        '&apellido2=' + document.getElementById('apellido2').value+
+        '&fecha_nac=' + document.getElementById('fecha_nac').value
+    );
+}
+
+function eliminarUsuario(id){
+    var xhttp = new XMLHttpRequest();
+
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/usuarios', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+    
+    console.log(id);
+    xhttp.open('DELETE', '/usuarios', true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(
+        'id_usuario=' + id
+    );
+}
+
 /**
  * 
  * Usuario formulario, muestra el formulario del usuario para ser editado.
@@ -123,6 +200,8 @@ function frmUsuario(){
     limpiarFrmUsuario();
     $("#modal_usuario_edit").modal('show');
     document.getElementById('btnGuardarUsuario').setAttribute('onclick', 'guardarUsuario()');
+    document.getElementById('cui').disabled = true;
+    document.getElementById('usuario').disabled = true;
     var url = '<?php echo $url; ?>';
     var xhttp = new XMLHttpRequest();
 

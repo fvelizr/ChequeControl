@@ -13,18 +13,17 @@
 	 * incorporar otros según se requiera.
 	 */
 	
-	/*if(isset($_SESSION["login_time"]) && (time()-$_SESSION['login_time'] > $config->get('max_time_session'))){ //Condicion para evitar que la session inactiva, tenga mas de 15 minutos
+	if(isset($_SESSION["login_time"]) && (time()-$_SESSION['login_time'] > $config->get('max_time_session'))){ //Condicion para evitar que la session inactiva, tenga mas de 15 minutos
 		//Aqui hay que mostrar un alert y hacer la redireccion al inicio.
 		echo 'alert("Sesion expirada");';
 		session_destroy();
 		header('Location: ');
 		exit;
-	}else 
-	*//*if(!isset($_SESSION["login_token"])){ 
+	}else if(!isset($_SESSION["login_token"])){ 
 		/**
 		 * Condicion para validar que el usuario este logueado, si no esta logueado, no podra hacer absolutamente nada en el sistema.
 		 * Importante: cuando ya este la vista y la base de datos hay que modificar las funciones de verificarDatos para que haga las consultas a la base de datos.
-		 *
+		 */
 		$enlace = $ruta->enlace(); //Se utiliza para setear la url
 		switch ($enlace[1]){
 			case 'validarIngreso':
@@ -40,7 +39,7 @@
 				break;
 		}
 		
-	}else */ if($ruta->get() == 'GET'){
+	}else if($ruta->get() == 'GET'){
 		/**
 		 * Se obtiene el enlace de la dirección web y se divide
 		 * para poder tratarlas con un switch.
@@ -248,14 +247,25 @@
 		$enlace = $ruta->enlace();
 		switch($enlace[1]){
 			case 'usuarios':
-				
+				require_once($config->get('controllersDir').'Usuarios.php');
+				$usuarios = new Usuarios($config);
+				echo $usuarios->editarUsuario();
 				break;
 			default:
+				
 				break;
 		}
-		/**
-		 * Pueden agregarse más Métodos
-		 */
-		echo "Nothing";
+	}else if($ruta->get() == 'DELETE'){
+		$enlace = $ruta->enlace();
+		switch($enlace[1]){
+			case 'usuarios':
+				require_once($config->get('controllersDir').'Usuarios.php');
+				$usuarios = new Usuarios($config);
+				echo $usuarios->eliminarUsuario();
+				break;
+			default:
+				
+				break;
+		}
 	}
  ?>

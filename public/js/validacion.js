@@ -41,12 +41,12 @@ function validarIngreso(){
             if(res.codigo != 200){
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
-                setTimeout(location.href = '/', 10000);
+                setTimeout(location.href = '/usuarios', 10000);
             }else{
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
                 alerta.className = 'alert alert-success';
-                setTimeout(location.href = '/', 10000);
+                setTimeout(location.href = '/usuarios .', 10000);
                 //location.href = '/';
             }
             

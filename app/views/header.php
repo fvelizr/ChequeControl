@@ -24,7 +24,7 @@ la Clase Template
 
     
 	<script src="js/jquery-3.5.1.slim.min.js?v=<?php echo time();?>"
-            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js?v=<?php echo time();?>"></script>
         <script src="js/validacion.js?v=<?php echo time();?>"></script>
     </body>

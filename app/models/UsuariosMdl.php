@@ -41,6 +41,18 @@
 			return $datos;
 		}
 
+		public function obtenerModulos($id){
+			$this->db->query("SELECT a.id_modulo, a.nombre, a.descripcion, nvl(b.id_modulo,0) AS permiso, a.ruta, a.padre, a.asignable FROM modulos a
+			LEFT JOIN 
+				((SELECT id_modulo FROM usuarios_modulos WHERE id_usuario = :id)
+				UNION
+				(SELECT id_modulo FROM grupos_modulos WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
+			ON a.id_modulo = b.id_modulo
+            ORDER BY a.id_modulo");
+			$this->db->bind(':id', $id);
+			return $this->db->resultSet();
+		}
+
 		public function crearUsuarios($nombre, $contra, $cui, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac, $grupo, $monto){
 			$this->db->query("SELECT usuario_crear(:nombre, :contra, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR'), :grupo, :monto) AS result FROM dual");
 			$this->db->bind(':nombre', $nombre);
@@ -82,6 +94,12 @@
 		public function obtenerGrupos(){
 			$this->db->query("SELECT id_grupo, nombre, descripcion FROM grupos");
 			return $this->db->resultSet();
+		}
+
+		public function validarLogin($nombre){
+			$this->db->query("SELECT id_usuario, contra FROM usuarios WHERE nombre_usuario = :nombre");
+			$this->db->bind(':nombre', $nombre);
+			return $this->db->single();
 		}
 
 

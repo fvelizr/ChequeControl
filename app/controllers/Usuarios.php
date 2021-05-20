@@ -16,7 +16,7 @@
 		public function listaUsuarios(){
 			require($this->config->get('modelsDir').'UsuariosMdl.php');
 			$UsuarioMdl = new UsuariosMdl($this->config);
-			$this->view->info = "hola";
+			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->usuarios = $UsuarioMdl->obtenerUsuarios();
 			$this->view->grupos = $UsuarioMdl->obtenerGrupos();
 			$this->view->contenido = $this->view->render($this->config->get('viewsDir').'menu.php');

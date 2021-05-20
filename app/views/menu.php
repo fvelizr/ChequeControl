@@ -9,40 +9,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="menu.html">INICIO<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="">INICIO<span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CHEQUES
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a name="CreaCheques" class="dropdown-item" href="#">CREAR CHEQUE</a>
-                    <a name="AutorizarCheques" class="dropdown-item" href="#">AUTORIZAR CHEQUE</a>
-                </div>
-
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    CATALOGOS
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                    <a name="Empleados" class="dropdown-item" href="Empleados.html" target="myFrame">EMPLEADOS</a>
-                    <a name="Cuentas" class="dropdown-item" href="#">CUENTAS BANCARIAS</a>
-                    <a name="Chequeras" class="dropdown-item" href="#">CHEQUERAS</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    REPORTES
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a name="r1" class="dropdown-item" href="usuarios">Usuarios</a>
-                    <a name="r2" class="dropdown-item" href="#">Reporte2</a>
-                    <a name="r3" class="dropdown-item" href="#">Reporte3</a>
-                </div>
-            </li>
+            <?php $padre = false; ?>
+            <?php foreach($modulos AS $datos){?>
+                <?php if($datos['PADRE'] == 0 && substr($datos['ID_MODULO'], -1) == 0){ ?>
+                    <?php if($padre == true){ $padre = false; ?>
+                            </div>
+                        </li>
+                    <?php } ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?php echo $datos['RUTA']; ?>"><?php echo $datos['NOMBRE']; ?><span class="sr-only">(current)</span></a>
+                    </li>
+                <?php }else{?>
+                    <?php if($datos['PADRE'] == 1) { $padre = true;?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $datos['NOMBRE']; ?>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <?php }else{?>
+                            <a name="CreaCheques" class="dropdown-item" href="<?php echo $datos['RUTA']; ?>"><?php echo $datos['NOMBRE']; ?></a>
+                            <?php if(substr($datos['ID_MODULO'], -1) != 0) $padre = false; ?>
+                    <?php } ?>
+                <?php }?>
+            <?php } ?>
             <li class="nav-item active">
                 <a class="nav-link" href="salir">CERRAR SESION<span class="sr-only">(current)</span></a>
             </li>

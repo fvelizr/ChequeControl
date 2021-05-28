@@ -22,6 +22,22 @@ function limpiarFrmUsuario(){
     document.getElementById('fecha_creacion').value = '00-00-0000';
 }
 
+function limpiarFrmProveedor(){
+    /*document.getElementById('id_usuario').value = 0;
+    document.getElementById('grupo').value = 0;
+    document.getElementById('usuario').value = '';
+    document.getElementById('contra').value = '';
+    document.getElementById('monto').value = '';
+    document.getElementById('cui').value = '';
+    document.getElementById('nombre1').value = '';
+    document.getElementById('nombre2').value = '';
+    document.getElementById('nombre3').value = '';
+    document.getElementById('apellido1').value = '';
+    document.getElementById('apellido2').value = '';
+    document.getElementById('fecha_nac').valu = '00-00-0000';
+    document.getElementById('fecha_creacion').value = '00-00-0000';*/
+}
+
 /**
  * 
  * @param {nombre de usuario} usuario 
@@ -65,6 +81,8 @@ function validarIngreso(){
 function frmUsuario(){
     limpiarFrmUsuario();
     $("#modal_usuario_edit").modal('show');
+    document.getElementById('cui').disabled = false;
+    document.getElementById('usuario').disabled = false;
     document.getElementById('btnGuardarUsuario').setAttribute('onclick', 'crearUsuario()');
 }
 
@@ -119,7 +137,10 @@ function frmUsuario(){
 
 function guardarUsuario(){
     var xhttp = new XMLHttpRequest();
-
+    var modulos = '';
+    var datamod = '';
+    var privilegios = '';
+    var datapriv = '';
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -136,6 +157,24 @@ function guardarUsuario(){
         }
     };
     
+    modulos = document.getElementById('modulos');
+    console.log(modulos.children[0].length);
+
+    for (var i = 0; i < modulos.children[0].length; i++) {
+        console.log(modulos.childNodes[0][i]);
+        var data = modulos.childNodes[0][i];
+        if(data.checked == true) datamod += data.value+'|';
+    }
+
+    privilegios = document.getElementById('privilegios');
+    console.log(privilegios.children[0].length);
+
+    for (var i = 0; i < privilegios.children[0].length; i++) {
+        console.log(privilegios.childNodes[0][i]);
+        var data = privilegios.childNodes[0][i];
+        if(data.checked == true) datapriv += data.value+'|';
+    }
+
     console.log(
     '&usuario=' + document.getElementById('usuario').value+
     '&contra=' + document.getElementById('contra').value+
@@ -146,7 +185,7 @@ function guardarUsuario(){
     '&nombre3=' + document.getElementById('nombre3').value+
     '&apellido1=' + document.getElementById('apellido1').value+
     '&apellido2=' + document.getElementById('apellido2').value+
-    '&fecha_nac=' + document.getElementById('fecha_nac').value);
+    '&fecha_nac=' + document.getElementById('fecha_nac').value+'$info='+datapriv);
     xhttp.open('PUT', '/usuarios', true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send(
@@ -160,7 +199,9 @@ function guardarUsuario(){
         '&nombre3=' + document.getElementById('nombre3').value+
         '&apellido1=' + document.getElementById('apellido1').value+
         '&apellido2=' + document.getElementById('apellido2').value+
-        '&fecha_nac=' + document.getElementById('fecha_nac').value
+        '&fecha_nac=' + document.getElementById('fecha_nac').value+
+        '&mod=' + datamod+
+        '&priv=' + datapriv
     );
 }
 
@@ -196,6 +237,7 @@ function eliminarUsuario(id){
  * Usuario formulario, muestra el formulario del usuario para ser editado.
  * 
  */
+
  function usuarioEnForm(id){
     limpiarFrmUsuario();
     $("#modal_usuario_edit").modal('show');
@@ -236,6 +278,7 @@ function eliminarUsuario(id){
                 var frm = document.createElement('form');
                 $.each(modulos,function(index, value){
                     var input = document.createElement('input');
+                    if(value['PERMISO'] > 0) input.checked = true;
                     input.id = value['ID_MODULO'];
                     input.name = value['ID_MODULO'];
                     input.setAttribute('type','checkbox');
@@ -272,6 +315,7 @@ function eliminarUsuario(id){
                 frm = document.createElement('form');
                 $.each(privilegios,function(index, value){
                     var input = document.createElement('input');
+                    if(value['PERMISO'] > 0) input.checked = true;
                     input.id = value['ID_PRIVILEGIO'];
                     input.name = value['ID_PRIVILEGIO'];
                     input.setAttribute('type','checkbox');
@@ -309,5 +353,127 @@ function eliminarUsuario(id){
     };
     console.log(id);
     xhttp.open('GET', 'usuarios/'+id, true);
+    xhttp.send();
+}
+
+
+function frmProveedor(){
+    $("#modal_proveedor_edit").modal('show');
+    document.getElementById('cui').disabled = false;
+    //document.getElementById('id_usuario').disabled = false;
+    document.getElementById('btnGuardarProveedor').setAttribute('onclick', 'crearProveedor()');
+}
+
+function crearProveedor(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                //limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/proveedores', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+    console.log('nomproveedor=' + document.getElementById('nomproveedor').value+
+    '&nit=' + document.getElementById('nit').value+
+    '&cui=' + document.getElementById('cui').value+
+    '&nombre1=' + document.getElementById('nombre1').value+
+    '&nombre2=' + document.getElementById('nombre2').value+
+    '&nombre3=' + document.getElementById('nombre3').value+
+    '&apellido1=' + document.getElementById('apellido1').value+
+    '&apellido2=' + document.getElementById('apellido2').value+
+    '&fecha_nac=' + document.getElementById('fecha_nac').value);
+    xhttp.open('POST', '/proveedores', true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(
+        'nomproveedor=' + document.getElementById('nomproveedor').value+
+        '&nit=' + document.getElementById('nit').value+
+        '&cui=' + document.getElementById('cui').value+
+        '&nombre1=' + document.getElementById('nombre1').value+
+        '&nombre2=' + document.getElementById('nombre2').value+
+        '&nombre3=' + document.getElementById('nombre3').value+
+        '&apellido1=' + document.getElementById('apellido1').value+
+        '&apellido2=' + document.getElementById('apellido2').value+
+        '&fecha_nac=' + document.getElementById('fecha_nac').value
+    );
+}
+
+
+function guardarProveedor(){
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                //limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/proveedores', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+
+    console.log('');
+    xhttp.open('PUT', '/proveedores', true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(
+        'id_proveedor=' + document.getElementById('id_proveedor').value+ 
+        '&nomproveedor=' + document.getElementById('nomproveedor').value+
+        '&nit=' + document.getElementById('nit').value+
+        '&nombre1=' + document.getElementById('nombre1').value+
+        '&nombre2=' + document.getElementById('nombre2').value+
+        '&nombre3=' + document.getElementById('nombre3').value+
+        '&apellido1=' + document.getElementById('apellido1').value+
+        '&apellido2=' + document.getElementById('apellido2').value+
+        '&fecha_nac=' + document.getElementById('fecha_nac').value
+    );
+}
+
+function proveedorEnForm(id){
+    //limpiarFrmProveedor();
+    $("#modal_proveedor_edit").modal('show');
+    document.getElementById('btnGuardarProveedor').setAttribute('onclick', 'guardarProveedor()');
+    document.getElementById('cui').disabled = true;
+    //document.getElementById('nit').disabled = true;
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var res = JSON.parse(this.responseText);
+            var objeto = res['objeto'][0];
+
+            if(res.codigo == 200){
+                console.log(res);
+                console.log(objeto);
+                //Usuario
+                document.getElementById('id_proveedor').value = objeto.ID_PROVEEDOR;
+                document.getElementById('nomproveedor').value = objeto.NOMBRE;
+                console.log(document.getElementById('nomproveedor'));
+                document.getElementById('nit').value = objeto.NIT;
+
+                //Personal
+                document.getElementById('cui').value = objeto.CUI;
+                document.getElementById('nombre1').value = objeto.PRIMER_NOMBRE;
+                document.getElementById('nombre2').value = objeto.SEGUNDO_NOMBRE;
+                document.getElementById('nombre3').value = objeto.OTRO_NOMBRE;
+                document.getElementById('apellido1').value = objeto.PRIMER_APELLIDO;
+                document.getElementById('apellido2').value = objeto.SEGUNDO_APELLIDO;
+                document.getElementById('fecha_nac').value = objeto.FECHA_NAC;
+            }
+        }
+    };
+    console.log(id);
+    xhttp.open('GET', 'proveedores/'+id, true);
     xhttp.send();
 }

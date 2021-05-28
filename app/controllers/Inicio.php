@@ -12,6 +12,9 @@
 		}
 
 		public function indexAction(){
+			require($this->config->get('modelsDir').'UsuariosMdl.php');
+			$UsuarioMdl = new UsuariosMdl($this->config);
+			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->contenido = $this->view->render($this->config->get('viewsDir').'menu.php');
 			echo $this->view->render($this->config->get('viewsDir').'header.php');
 		}

@@ -26,13 +26,13 @@
 				UNION
 				(SELECT id_modulo FROM grupos_modulos WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
 			ON a.id_modulo = b.id_modulo
-			WHERE a.asignable = 1 AND a.padre = 0");
+			WHERE a.asignable = 1");
 			$this->db->bind(':id', $id);
 			$datos['modulos']  = $this->db->resultSet();
 
 			$this->db->query("SELECT a.id_privilegio, a.nombre, a.descripcion, nvl(b.id_privilegio,0) AS permiso FROM privilegios a
 			LEFT JOIN 
-				((SELECT id_privilegio FROM usuarios_privilegios WHERE id_usuario = 1)
+				((SELECT id_privilegio FROM usuarios_privilegios WHERE id_usuario = :id)
 				UNION
 				(SELECT id_privilegio FROM grupos_privilegios WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
 			ON a.id_privilegio = b.id_privilegio");
@@ -43,7 +43,7 @@
 
 		public function obtenerModulos($id){
 			$this->db->query("SELECT a.id_modulo, a.nombre, a.descripcion, nvl(b.id_modulo,0) AS permiso, a.ruta, a.padre, a.asignable FROM modulos a
-			LEFT JOIN 
+			INNER JOIN 
 				((SELECT id_modulo FROM usuarios_modulos WHERE id_usuario = :id)
 				UNION
 				(SELECT id_modulo FROM grupos_modulos WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
@@ -83,6 +83,32 @@
 			$this->db->bind(':grupo', $grupo);
 			$this->db->bind(':monto', $monto);
 			return $this->db->resultSet();
+		}
+
+		public function guardarModulos($usuario, $modulo){
+			$this->db->query("INSERT INTO usuarios_modulos (id_usuario, id_modulo)VALUES(:usuario, :modulo)");
+			$this->db->bind(':usuario', $usuario);
+			$this->db->bind(':modulo', $modulo);
+			return $this->db->execute();
+		}
+
+		public function reiniciarModulos($usuario){
+			$this->db->query("DELETE FROM usuarios_modulos WHERE id_usuario=:usuario");
+			$this->db->bind(':usuario', $usuario);
+			return $this->db->execute();
+		}
+
+		public function guardarPrivilegios($usuario, $privilegio){
+			$this->db->query("INSERT INTO usuarios_privilegios (id_privilegio, id_usuario)VALUES(:privilegio, :usuario)");
+			$this->db->bind(':usuario', $usuario);
+			$this->db->bind(':privilegio', $privilegio);
+			return $this->db->execute();
+		}
+
+		public function reiniciarPrivilegios($usuario){
+			$this->db->query("DELETE FROM usuarios_privilegios WHERE id_usuario=:usuario");
+			$this->db->bind(':usuario', $usuario);
+			return $this->db->execute();
 		}
 
 		public function eliminarUsuario($id){

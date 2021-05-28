@@ -19,7 +19,8 @@
 		session_destroy();
 		header('Location: ');
 		exit;
-	}else if(!isset($_SESSION["login_token"])){ 
+	}else
+	if(!isset($_SESSION["login_token"])){ 
 		/**
 		 * Condicion para validar que el usuario este logueado, si no esta logueado, no podra hacer absolutamente nada en el sistema.
 		 * Importante: cuando ya este la vista y la base de datos hay que modificar las funciones de verificarDatos para que haga las consultas a la base de datos.
@@ -40,29 +41,7 @@
 		}
 		
 	}else if($ruta->get() == 'GET'){
-		/**
-		 * Se obtiene el enlace de la dirección web y se divide
-		 * para poder tratarlas con un switch.
-		 *
-		 * Por ejemplo si la ruta es http://aplicacion.com/inicio
-		 * el post procesado de ruta lo dejaría así:
-		 * $enlace[0] = '';
-		 * $enlace[1] = 'inicio';
-		 *
-		 * La ruta raíz de la página por defecto es vacía ''.
-		 *
-		 * Puedes anidar switches en caso que la ruta tenga 
-		 * subdirectorios, por ejemplo http://aplicacion.com/usuario/3
-		 * $enlace[0] = "";
-		 * $enlace[1] = "usuario";
-		 * $enlace[2] = "3";
-		 */
 		$enlace = $ruta->enlace();
-
-		/**
-		 * El Switch utiliza una accion dependiendo de la ruta.
-		 */
-		
 		switch ($enlace[1]){
 			/**
 			 * Ruta para hacer el logout, pendiente de validar el cerrado de session
@@ -70,12 +49,15 @@
 			case 'hash':
 				echo hash('sha256', 'edmundo');
 				break;
+
 			case 'salir':
 				if(isset($_SESSION['login_token'])){
 					session_destroy();
 					header('Location: /');
 					exit;
 				}
+
+				session_destroy();
 				break;
 
 			case '':
@@ -89,125 +71,78 @@
 			 * Modulo de Usuarios
 			 */
 			case 'usuarios':
-				require_once($config->get('controllersDir').'Usuarios.php');
-				$usuarios = new Usuarios($config);
 				switch($enlace[2]){
 					case '':
+						require_once($config->get('controllersDir').'Usuarios.php');
+						$usuarios = new Usuarios($config);
 						return $usuarios->listaUsuarios();
 						break;
 
-					case 'crear':
-						return $usuarios->crearUsuario();
-						break;
-					
-					case 'editar':
-						return $usuarios->editarUsuario();
-						break;
-
-					case 'eliminar':
-						return $usuarios->eliminar();
-						break;
-
 					default:
+						require_once($config->get('controllersDir').'Usuarios.php');
+						$usuarios = new Usuarios($config);
 						echo $usuarios->obtenerUsuario($enlace[2]);
 						break;
 				}
+				
 				break;
 
 			/**
 			 * Modulo de Proveedores
 			 */
 			case 'proveedores':
-				require_once($config->get('controllersDir').'Proveedores.php');
-				$proveedores = new Proveedores($config);
-				return $proveedores->indexAction();
+				switch($enlace[2]){
+					case '':
+						require_once($config->get('controllersDir').'Proveedores.php');
+						$proveedores = new Proveedores($config);
+						return $proveedores->listaProveedores();
+						break;
+
+					default:
+						require_once($config->get('controllersDir').'Proveedores.php');
+						$proveedores = new Proveedores($config);
+						echo $proveedores->obtenerProveedor($enlace[2]);
+						break;
+				}
+				
 				break;
 
-			/**
-			 * Modulo de Bancos
-			 */
-			case 'bancos':
-				require_once($config->get('controllersDir').'Bancos.php');
-				$bancos = new Bancos($config);
-				return $bancos->indexAction();
+			case 'cuentas':
+				switch($enlace[2]){
+					case '':
+						require_once($config->get('controllersDir').'Cuentas.php');
+						$cuentas = new Cuentas($config);
+						return $cuentas->listaCuentas();
+						break;
+
+					default:
+						require_once($config->get('controllersDir').'Cuentas.php');
+						$cuentas = new Cuentas($config);
+						echo $cuentas->obtenerCuenta($enlace[2]);
+						break;
+				}
 				break;
 
-			case 'cuentasbancarias':
-				require_once($config->get('controllersDir').'CuentasBancarias.php');
-				$cuentas_bancarias = new CuentasBancarias($config);
-				return $cuentas_bancarias->indexAction();
-				break;
+			case 'cheques':
+				switch($enlace[2]){
+					case '':
+						require_once($config->get('controllersDir').'Cheques.php');
+						$Cheques = new Cheques($config);
+						return $Cheques->listaCheques();
+						break;
 
-			case 'chequeras':
-				require_once($config->get('controllersDir').'Chequeras.php');
-				$chequeras = new Chequeras($config);
-				return $chequeras->indexAction();
-				break;
-			
-			/**
-			 * Modulo de Generacion de Cheques
-			 */
-			case 'generacioncheques':
-				require_once($config->get('controllersDir').'GeneracionCheques.php');
-				$generacion_cheques = new GeneracionCheques($config);
-				return $generacion_cheques->indexAction();
-				break;
+					case 'cuentas':
+						require_once($config->get('controllersDir').'Cheques.php');
+						$Cheques = new Cheques($config);
+						echo $Cheques->obtenerCuentas($enlace[3]);
+						break;
 
-			/**
-			 * Modulo de Libreacion de Auditoria
-			 */
-			case 'auditoria':
-				require_once($config->get('controllersDir').'Auditoria.php');
-				$auditoria = new Auditoria($config);
-				return $auditoria->indexAction();
-				break;
-
-				//Ruta para configurar el monto maximo sin liberacion de auditoria
-			case 'maxautorizado':
-				require_once($config->get('controllersDir').'MaxAutorizado.php');
-				$max_autorizado = new MaxAutorizado($config);
-				return $max_autorizado->indexAction();
-				break;
-
-			/**
-			 * Modulo de Liberacion de Gerencia
-			 */
-			case 'gerencia':
-				require_once($config->get('controllersDir').'Gerencia.php');
-				$gerencia = new Gerencia($config);
-				return $gerencia->indexAction();
-				break;
-			
-			/**
-			 * Modulo de Impresion o Entrega
-			 */
-			case 'caja':
-				require_once($config->get('controllersDir').'Caja.php');
-				$cuentas_bancarias = new CuentasBancarias($config);
-				return $cuentas_bancarias->indexAction();
-				break;
-			
-			
-			case 'home':
-				/**
-				 * Se llama y se crea un objeto de la clase Home 
-				 * para este ejemplo
-				 */
-				require_once($config->get('controllersDir').'Home.php');
-				$home = new Home($config);
-
-				/**
-				 * Se llama y retorna la función indexAction() de la clase
-				 * Home
-				 */
-				return $home->indexAction();
-				break; // Se finaliza el switch
-			/**
-			 * Si la direción es /hola, se hace un echo con hola y
-			 * se termina el switch
-			 */
-			case 'hola': 
-				echo "hola";
+					default:
+						require_once($config->get('controllersDir').'Cheques.php');
+						$Cheques = new Cheques($config);
+						echo $Cheques->obtenerCheque($enlace[2]);
+						break;
+				}
 				break;
 			
 			default:
@@ -215,8 +150,7 @@
 				echo "ERROR 404: NOT FOUND";
 				break;
 		}
-
-	}elseif($ruta->get() == 'POST'){
+	}else if($ruta->get() == 'POST'){
 		$enlace = $ruta->enlace();
 		switch($enlace[1]){
 			case 'usuarios':
@@ -224,25 +158,25 @@
 				$usuarios = new Usuarios($config);
 				echo $usuarios->crearUsuario();
 				break;
+
+			case 'proveedores':
+				require_once($config->get('controllersDir').'Proveedores.php');
+				$Proveedores = new Proveedores($config);
+				echo $Proveedores->crearProveedor();
+				break;
+
+			case 'cuentas':
+				require_once($config->get('controllersDir').'Cuentas.php');
+				$Cuentas = new Cuentas($config);
+				echo $Cuentas->crearCuenta();
+				break;
+
+			case 'cheques':
+				require_once($config->get('controllersDir').'Cheques.php');
+				$Cheques = new Cheques($config);
+				echo $Cheques->crearCheque();
+				break;
 		}
-		/*switch($_POST['solicitud']){
-			case 'crearToken':
-				require_once($config->get('controllersDir').'Login.php');
-				$controlador = new Login($config);
-				echo $controlador->crearToken(2);
-				break;
-	
-			case 'verificarToken':
-				require_once($config->get('controllersDir').'Login.php');
-				$controlador = new Login($config);
-				return $controlador->verificarToken(1);
-				break;
-		}*/
-		
-		/**
-		 * No está implementado, pero es similar a los pasos del
-		 * Método GET con el switch
-		 */
 	}else if($ruta->get() == 'PUT'){
 		$enlace = $ruta->enlace();
 		switch($enlace[1]){
@@ -251,8 +185,26 @@
 				$usuarios = new Usuarios($config);
 				echo $usuarios->editarUsuario();
 				break;
+
+			case 'proveedores':
+				require_once($config->get('controllersDir').'Proveedores.php');
+				$proveedores = new Proveedores($config);
+				echo $proveedores->editarProveedor();
+				break;
+
+			case 'cuentas':
+				require_once($config->get('controllersDir').'Cuentas.php');
+				$Cuentas = new Cuentas($config);
+				echo $Cuentas->editarCuenta();
+				break;
+
+			case 'cheques':
+				require_once($config->get('controllersDir').'Cheques.php');
+				$Cheques = new Cheques($config);
+				echo $Cheques->editarCheque();
+				break;
+
 			default:
-				
 				break;
 		}
 	}else if($ruta->get() == 'DELETE'){
@@ -263,8 +215,8 @@
 				$usuarios = new Usuarios($config);
 				echo $usuarios->eliminarUsuario();
 				break;
+
 			default:
-				
 				break;
 		}
 	}

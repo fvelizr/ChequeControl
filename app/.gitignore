@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CHEQUES</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="">
+
+    <body>
+
+       <br/><br/>
+
+       <div class="row">
+        <div class='col-xs-2 col-sm-2 col-md-2'></div>
+        <div class='col-xs-8 col-sm-8 col-md-8' style="border-style:solid; background-color: powderblue">
+            <center><h1>GENERACION DE CHEQUES</h1></center>
+
+            <div class='row'style="margin-left: 10px; margin-right: 10px">
+                <label  style="width:15%; font-size:18px">Banco:</label>
+                <select style="width:45%; id="Banco">
+                                    <option value="S">Industrial</option>
+                                    <option value="A">Banco de Desarrollo Rural</option>
+                                    <option value="A">Banco de Antigua</option>
+                                </select> 
+                                <label  style="width:15%; font-size:18px"> Cuenta:</label>
+                <select  style="width:25%; id="Cuenta">
+                                    <option value="S">1422-256698-2555</option>
+                                    <option value="A">2568-856956-2358</option>
+                                    <option value="A">7456-853125-3377</option>
+                                </select> 
+           </div>
+
+
+           <br/><br/>
+           <div class='row'style="margin-left: 10px; margin-right: 10px">
+               <label  style="width:35%; font-size:18px">BANCO INDUSTRIAL</label>
+               <label  style="width:35%" >Nueva Verapaz</label>
+               <label  style="width:30%">Cheque</label>
+           </div>
+
+           <div class='row'style="margin-left: 10px; margin-right: 10px">
+
+               <label  style="width:35%"></label>
+               <label  style="width:35%">1422-256698-2555</label>
+               <label  style="width:30%">No. 0000001</label>
+           </div>
+           <br/><br/>
+
+           <div class='row'style="margin-left: 10px; margin-right: 10px">
+
+               <label  style="width:20%">Lugar y Fecha:</label>
+               <input  style="width:50%"type="text" name="lugar"   placeholder="Ingrese el Lugar y Fecha">
+               <label  style="width:5%"> Q.</label>
+               <input  style="width:25%"type="text" name="cantidadNumero"   placeholder="Ingrese Cantidad">
+
+           </div>
+
+           <div class='row'style="margin-left: 10px; margin-right: 10px">
+
+               <label  style="width:20%">Pago a la Orden de: </label>
+               <select style="width:80%; id="Portador">
+                                    <option value="1">PROVEEDOR1</option>
+                                    <option value="2">PROVEEDOR2</option>
+                                    <option value="3">PROVEEDOR3</option>
+                                </select> 
+                
+
+           </div>
+
+           <div class='row'style="margin-left: 10px; margin-right: 10px">
+
+               <label  style="width:20%">La Suma de: </label>
+               <input  style="width:80%"type="text" name="cantidadLetras"   placeholder="Ingrese la Cantidad en Letras">
+
+           </div>
+
+           <br/><br/>
+       </div>
+       <div class='col-xs-2 col-sm-2 col-md-2'></div>
+   </div>
+
+
+   <br/><br/><br/>
+   <CENTER>
+    <footer>PROYECTO FINAL BASE DE DATOS 2</footer>
+</CENTER>   
+</body>
+
+<script
+src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+</html>

@@ -41,10 +41,12 @@
                                     style="font-size:11px" data-toggle="modal" onclick="usuarioEnForm(<?php echo $datos['ID_USUARIO']; ?>)">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
+                                <?php if($datos['ID_USUARIO'] != $_SESSION['id_usuario'] || $_SESSION['id_usuario'] != 1){ ?>
                                 <button type="button" class="btn btn-danger btn-lg active w-auto"
                                     style="font-size:11px" data-toggle="modal" data-target="#modal_usuario_elim" onclick="eliminarUsuario(<?php echo $datos['ID_USUARIO']; ?>)">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
@@ -105,7 +107,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="monto">Monto Maximo</label>
-                                                    <input id="monto" name="monto" type="number" class="form-control" aria-describedby="monto"
+                                                    <input id="monto" name="monto" type="number" class="form-control" aria-describedby="monto" maxlength="9"
                                                     placeholder="Ej. 10.00">
                                                 </div>
                                             </form>

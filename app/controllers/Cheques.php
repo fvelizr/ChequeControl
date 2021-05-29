@@ -15,6 +15,10 @@
 			$this->view = new Template();
 		}
 
+        public function info($numero, $fecha, $tot, $cuen, $id_banco, $id_proveedor, $nombre){
+            echo ($this->model->guardarCheque($numero, $fecha, $tot, $cuen, $id_banco, $id_proveedor, $nombre));
+        }
+
 		public function listaCheques(){
 			require($this->config->get('modelsDir').'UsuariosMdl.php');
 			$UsuarioMdl = new UsuariosMdl($this->config);
@@ -22,6 +26,7 @@
             require($this->config->get('modelsDir').'CuentasMdl.php');
 			$CuentasMdl = new CuentasMdl($this->config);
 
+            $this->view->usr = $UsuarioMdl;
 			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->Cheques = $this->model->obtenerCheques();
 			$this->view->bancos = $CuentasMdl->obtenerBancos();
@@ -114,7 +119,7 @@
                     if($Cuentas->existeBanco($_POST['id_banco'])['ID_BANCO'] >= 1){
                         if($Cuentas->existeCuenta($_POST['cuentas_bancarias'])['NUMERO'] >= 1){
                             if($this->model->existeCheque($_POST['id_banco'], $_POST['cuentas_bancarias'], $_POST['numero'])['NUMERO'] <= 0){
-                                $this->model->crearCheque($_POST['numero'], $_POST['fecha'], $_POST['total'], $_POST['cuentas_bancarias'], $_POST['id_banco'], $_POST['id_proveedor'], $_SESSION['id_usuario'], $_POST['nombre']);
+                                $this->model->crearCheque($_POST['numero'], $_POST['fecha'], $_POST['total'], $_POST['cuentas_bancarias'], $_POST['id_banco'], $_POST['id_proveedor'], $_SESSION['id_usuario'], $_POST['nombre'], $_POST['lugar']);
 
                                 $res['codigo'] = '200';
                                 $res['mensaje'] = 'ERROR: Cheque creada exitosamente.';
@@ -177,14 +182,31 @@
                     if($Cuentas->existeBanco($P_PUT['id_banco'])['ID_BANCO'] >= 1){
                         if($Cuentas->existeCuenta($P_PUT['cuentas_bancarias'])['NUMERO'] >= 1){
                             if($this->model->existeCheque($P_PUT['id_banco'], $P_PUT['cuentas_bancarias'], $P_PUT['numero'])['NUMERO'] >= 1){
-                                //die(json_encode($this->model->guardarCheque($P_PUT['numero'], $P_PUT['fecha'], $P_PUT['total'], $P_PUT['cuentas_bancarias'], $P_PUT['id_banco'], $P_PUT['id_proveedor'], $P_PUT['nombre'])));
+                                $vCambios = ' ';
+                                $old = $this->model->obtenerCheque($P_PUT['numero']);
+                                $info = $this->model->guardarCheque($P_PUT['numero'], $P_PUT['fecha'], $P_PUT['total'], $P_PUT['cuentas_bancarias'], $P_PUT['id_banco'], $P_PUT['id_proveedor'], $P_PUT['nombre']);
+                                $new = $this->model->obtenerCheque($P_PUT['numero']);
+                                if($old['FECHA'] != $new['FECHA']) $vCambios .= $old['FECHA'].' FECHA '.$new['FECHA'].'|';
+                                if($old['MONTO'] != $new['MONTO']) $vCambios .= $old['MONTO'].' MONTO '.$new['MONTO'].'|';
+                                if($old['REFERENCIA'] != $new['REFERENCIA']) $vCambios .= $old['REFERENCIA'].' REFERENCIA '.$new['REFERENCIA'].'|';
+                                if($old['CUENTA'] != $new['CUENTA']) $vCambios .= $old['CUENTA'].' CUENTA '.$new['CUENTA'].'|';
+                                if($old['BANCO'] != $new['BANCO']) $vCambios .= $old['BANCO'].' BANCO '.$new['BANCO'].'|';
+                                if($old['ID_PROVEEDOR'] != $new['ID_PROVEEDOR']) $vCambios .= $old['ID_PROVEEDOR'].' ID_PROVEEDOR '.$new['ID_PROVEEDOR'].'|';
+                                if($old['PROVEEDOR'] != $new['PROVEEDOR']) $vCambios .= $old['PROVEEDOR'].' PROVEEDOR '.$new['PROVEEDOR'].'|';
+
+                                $this->model->correcciones($P_PUT['numero'], $vCambios);
 
                                 $res['codigo'] = '200';
-                                $res['mensaje'] = 'ERROR: Se guardo correctamente el cheque.';
-                                $res['objeto'] = json_encode($P_PUT['nombre']);
+                                $res['mensaje'] = 'SUCCESS: Se guardo correctamente el cheque.';
+                                $res['objeto'] =  $info;
+                                $res['cambios'] =  $vCambios;
+                                $res['old'] =  $old;
+                                $res['new'] =  $new;
+                                //$res['objeto'] = $P_PUT;
                             }else{
                                 $res['codigo'] = '4040';
                                 $res['mensaje'] = 'ERROR: No existe .';
+                                
                             }
                         }else{
                             $res['codigo'] = '404';
@@ -202,6 +224,63 @@
             }else{
                 $res['codigo'] = '417';
                 $res['mensaje'] = 'ERROR: Los datos del formulario de registro, no se recibieron correctamente. <br>Por favor contacte al administrador.';
+                //session_destroy();
+            }
+            return json_encode($res);
+		}
+
+        public function liberarAuditoria($id){
+			$res = array();
+            $res['codigo'] = '404';
+            $res['mensaje'] = 'ERROR: validación no defina, contacte al administrador.';
+            if(isset($id)){
+                $Cheques = $this->model->liberarAuditoria($id);
+                
+                if($Cheques){
+                    $Liberacion = $this->model->actualizarEstado($id, 'Auditado');
+                    if($Liberacion){
+                        $res['codigo'] = '200';
+                        $res['mensaje'] = 'Se obtuvo con exito la Cheque.';
+                        $res['objeto'] = $Cheques;
+                    }else{
+                        $res['codigo'] = '404';
+                        $res['mensaje'] = 'No se pudo obtener correctamente la Cheque.';
+                    }
+                }else{
+                    $res['codigo'] = '404';
+                    $res['mensaje'] = 'No se pudo obtener correctamente la Cheque.';
+                }
+            }else{
+                $res['codigo'] = '417';
+                $res['mensaje'] = 'ERROR: El id del proveedor no se recibio. <br>Por favor contacte al administrador.';
+                //session_destroy();
+            }
+            return json_encode($res);
+		}
+        public function liberarGerencia($id){
+			$res = array();
+            $res['codigo'] = '404';
+            $res['mensaje'] = 'ERROR: validación no defina, contacte al administrador.';
+            if(isset($id)){
+                $Cheques = $this->model->liberarGerencia($id);
+                
+                if($Cheques){
+                    $Liberacion = $this->model->actualizarEstado($id, 'Gerenciado');
+                    if($Liberacion){
+                        $res['codigo'] = '200';
+                        $res['mensaje'] = 'Se obtuvo con exito la Cheque.';
+                        $res['objeto'] = $Cheques;
+                    }else{
+                        $res['codigo'] = '404';
+                        $res['mensaje'] = 'No se pudo obtener correctamente la Cheque.';
+                    }
+                }else{
+                    $res['codigo'] = '404';
+                    $res['mensaje'] = 'No se pudo obtener correctamente la Cheque.';
+                }
+            }else{
+                $res['codigo'] = '417';
+                $res['mensaje'] = 'ERROR: El id del proveedor no se recibio. <br>Por favor contacte al administrador.';
                 //session_destroy();
             }
             return json_encode($res);

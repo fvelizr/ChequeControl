@@ -29,6 +29,7 @@
                     $_SESSION['login_token'] = $usuario['CONTRA'].time();
                     $_SESSION['login_time'] = time();
                     $_SESSION['id_usuario'] = $usuario['ID_USUARIO'];
+                    $_SESSION['nombre'] = $_POST['usuario'];
                     
                     $res['codigo'] = '200';
                     $res['mensaje'] = 'Se ha iniciado sesión correctamente';

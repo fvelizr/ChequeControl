@@ -258,5 +258,11 @@
             }
             return json_encode($res);
 		}
+
+		public function obtenerModulo($usuario, $modulo){
+			require_once($this->config->get('modelsDir').'UsuariosMdl.php');
+			$UsuarioMdl = new UsuariosMdl($this->config);
+			return $UsuarioMdl->obtenerModulo($usuario, $modulo)['MOD'];
+		}
 	}
  ?>

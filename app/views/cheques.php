@@ -21,6 +21,7 @@
                         <th scope="col">Banco</th>
                         <th scope="col">Proveedor</th>
                         <th scope="col">Monto</th>
+                        <th scope="col">Estado</th>
                         <!--th scope="col">Fecha<br>Creacion</th-->
                         <th scope="col">Accion</th>
                     </tr>
@@ -34,11 +35,51 @@
                             <td><?php echo $datos['BANCO']; ?></td>
                             <td><?php echo $datos['PROVEEDOR']; ?></td>
                             <td><?php echo $datos['MONTO']; ?></td>
+                            <td><?php echo $datos['ESTADO']; ?></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-lg active w-auto"
+                                <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10402)['PRIV'] > 0){ ?>
+                                <button type="button" class="btn btn-success btn-lg active w-auto"
                                     style="font-size:11px" data-toggle="modal" onclick="ChequeEnForm(<?php echo $datos['NUMERO']; ?>)">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
+                                <?php } ?>
+                                <?php if($datos['ESTADO'] == 'Creado' && $datos['MONTO'] >= $datos['AUDITORIA']
+                                    && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1050100)['PRIV'] > 0){ ?>
+                                    
+                                <button type="button" class="btn btn-success btn-lg active w-auto"
+                                    style="font-size:11px" data-toggle="modal" onclick="liberarAuditoria(<?php echo $datos['NUMERO']; ?>)">
+                                    <i class="bi bi-file-earmark-break-fill"></i>
+                                </button>
+                                <?php } ?>
+                                <?php if(
+                                    (
+                                        (
+                                            ((($datos['ESTADO'] == 'Auditoria' && $datos['MONTO'] >= $datos['AUDITORIA']) 
+                                                || ($datos['ESTADO'] == 'Creado' && ($datos['MONTO'] >= $datos['GERENCIA']))) 
+                                            && $datos['MONTO'] < $datos['AUDITORIA'])
+                                        )
+                                    ) && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1060100)['PRIV'] > 0){ ?>
+                                <button type="button" class="btn btn-success btn-lg active w-auto"
+                                    style="font-size:11px" data-toggle="modal" onclick="liberarGerencia(<?php echo $datos['NUMERO']; ?>)">
+                                    <i class="bi bi-award-fill"></i>
+                                </button>
+                                <?php } ?>
+                                <?php if(
+                                        ($datos['ESTADO'] == 'Gerenciado' && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1070100)['PRIV'] > 0)
+                                        ||
+                                        ($datos['ESTADO'] == 'Creado' && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1070100)['PRIV'] > 0 && $datos['MONTO'] < $datos['AUDITORIA'] && $datos['MONTO'] < $datos['GERENCIA'])
+                                    ){ ?>
+                                <button type="button" class="btn btn-success btn-lg active w-auto"
+                                    style="font-size:11px" data-toggle="modal" onclick="imprimirCheque(<?php echo $datos['NUMERO']; ?>)">
+                                    <i class="bi bi-printer-fill"></i>
+                                </button>
+                                <?php } ?>
+                                <?php if($datos['ESTADO'] == 'Entregado'  && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1080100)['PRIV'] > 0){ ?>
+                                <button type="button" class="btn btn-success btn-lg active w-auto"
+                                    style="font-size:11px" data-toggle="modal" onclick="entregarCheque(<?php echo $datos['NUMERO']; ?>)">
+                                    <i class="bi bi-mailbox2"></i>
+                                </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
@@ -107,7 +148,6 @@
                                             <input style="width:70%;" type="text" id="letras" placeholder="Ingrese la Cantidad en Letras" disabled>
 
                                         </div>
-
                                         <br /><br />
                                     </div>
                                 </div>

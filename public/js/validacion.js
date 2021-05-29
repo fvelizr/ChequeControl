@@ -57,12 +57,12 @@ function validarIngreso(){
             if(res.codigo != 200){
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
-                setTimeout(location.href = '/usuarios', 10000);
+                setTimeout(location.href = '/inicio', 10000);
             }else{
                 alerta.hidden = false;
                 alerta.innerText = res.mensaje;
                 alerta.className = 'alert alert-success';
-                setTimeout(location.href = '/usuarios', 10000);
+                setTimeout(location.href = '/inicio', 10000);
                 //location.href = '/';
             }
             
@@ -144,6 +144,7 @@ function guardarUsuario(){
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             var res = JSON.parse(this.responseText);
             console.log(res);
             if(res.codigo == 200){
@@ -306,6 +307,7 @@ function eliminarUsuario(id){
                     frmg.className = 'form-group';
                     frmg.appendChild(row);
                     frm.appendChild(frmg);
+                    
                 });
                 document.getElementById('modulos').innerHTML = '';
                 document.getElementById('modulos').appendChild(frm);
@@ -313,7 +315,9 @@ function eliminarUsuario(id){
 
                 //Privilegios
                 frm = document.createElement('form');
+                
                 $.each(privilegios,function(index, value){
+                    console.log(value['PERMISO']);
                     var input = document.createElement('input');
                     if(value['PERMISO'] > 0) input.checked = true;
                     input.id = value['ID_PRIVILEGIO'];
@@ -410,6 +414,7 @@ function guardarProveedor(){
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             var res = JSON.parse(this.responseText);
             console.log(res);
             if(res.codigo == 200){

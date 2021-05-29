@@ -30,7 +30,6 @@ la Clase Template
 	    <script src="js/jquery-3.5.1.slim.min.js?v=<?php echo time();?>"
             crossorigin="anonymous"></script>
         <script src="js/bootstrap.js?v=<?php echo time();?>"></script>
-        <script src="js/bootstrap-select.js?v=<?php echo time();?>"></script>
         <script src="js/validacion.js?v=<?php echo time();?>"></script>
         <script src="js/cuentas.js?v=<?php echo time();?>"></script>
         <script src="js/cheques.js?v=<?php echo time();?>"></script>

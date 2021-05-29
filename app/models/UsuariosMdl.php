@@ -35,7 +35,7 @@
 				((SELECT id_privilegio FROM usuarios_privilegios WHERE id_usuario = :id)
 				UNION
 				(SELECT id_privilegio FROM grupos_privilegios WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
-			ON a.id_privilegio = b.id_privilegio");
+			ON a.id_privilegio = b.id_privilegio ORDER BY a.id_privilegio");
 			$this->db->bind(':id', $id);
 			$datos['privilegios']  = $this->db->resultSet();
 			return $datos;
@@ -71,14 +71,14 @@
 
 		public function guardarUsuario($nombre, $id, $contra, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac, $grupo, $monto){
 			$this->db->query("SELECT usuario_guardar(:nombre, :id, :contra, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR'), :grupo, :monto) AS result FROM dual");
-			$this->db->bind(':nombre', $nombre);
+			$this->db->bind(':nombre', $nombre, PDO::PARAM_STR);
 			$this->db->bind(':id', $id);
-			$this->db->bind(':contra', $contra);
-			$this->db->bind(':nombre1', $nombre1);
-			$this->db->bind(':nombre2', $nombre2);
-			$this->db->bind(':nombre3', $nombre3);
-			$this->db->bind(':apellido1', $apellido1);
-			$this->db->bind(':apellido2', $apellido2);
+			$this->db->bind(':contra', $contra, PDO::PARAM_STR);
+			$this->db->bind(':nombre1', $nombre1, PDO::PARAM_STR);
+			$this->db->bind(':nombre2', $nombre2, PDO::PARAM_STR);
+			$this->db->bind(':nombre3', $nombre3, PDO::PARAM_STR);
+			$this->db->bind(':apellido1', $apellido1, PDO::PARAM_STR);
+			$this->db->bind(':apellido2', $apellido2, PDO::PARAM_STR);
 			$this->db->bind(':fechanac', $fechanac);
 			$this->db->bind(':grupo', $grupo);
 			$this->db->bind(':monto', $monto);
@@ -122,12 +122,24 @@
 			return $this->db->resultSet();
 		}
 
+		public function obtenerPrivilegio($usuario, $privilegio){
+			$this->db->query("SELECT obtenerprivilegio(:usuario, :privilegio).codigo AS PRIV FROM dual");
+			$this->db->bind(':usuario', $usuario);
+			$this->db->bind(':privilegio', $privilegio);
+			return $this->db->single();
+		}
+
+		public function obtenerModulo($usuario, $modulo){
+			$this->db->query("SELECT obtenerModulo(:usuario, :modulo).codigo AS MOD FROM dual");
+			$this->db->bind(':usuario', $usuario);
+			$this->db->bind(':modulo', $modulo);
+			return $this->db->single();
+		}
+
 		public function validarLogin($nombre){
 			$this->db->query("SELECT id_usuario, contra FROM usuarios WHERE nombre_usuario = :nombre");
 			$this->db->bind(':nombre', $nombre);
 			return $this->db->single();
 		}
-
-
 	}
  ?>

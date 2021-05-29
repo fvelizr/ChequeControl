@@ -4,6 +4,7 @@ function frmCheques(){
     //document.getElementById('cui').disabled = false;
     //document.getElementById('id_usuario').disabled = false;
     document.getElementById('btnGuardarCheque').setAttribute('onclick', 'crearCheque()');
+    cambiarCuentas();
 
 }
 
@@ -103,7 +104,7 @@ function ChequeEnForm(id){
                 document.getElementById('cuentas_bancarias').value = objeto.CUENTA;
                 document.getElementById('nombre').value = objeto.PROVEEDOR;
                 document.getElementById('id_proveedor').value = objeto.ID_PROVEEDOR;
-                //document.getElementById('lugar').value = objeto.LUGAR;
+                document.getElementById('lugar').value = objeto.LUGAR;
                 document.getElementById('fecha').value = objeto.FECHA;
                 document.getElementById('total').value = objeto.MONTO;
                 //document.getElementById('cheque_inicial').value = objeto.CHEQUE_INICIAL;
@@ -121,6 +122,7 @@ function guardarCheque(){
 
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             var res = JSON.parse(this.responseText);
             console.log(res);
             if(res.codigo == 200){
@@ -146,4 +148,51 @@ function guardarCheque(){
         '&id_proveedor=' + document.getElementById('id_proveedor').value+
         '&nombre=' + document.getElementById('nombre').value
     );
+}
+
+function liberarAuditoria(id){
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                //limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/cheques', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+
+    xhttp.open('GET', 'cheques/auditoria/'+id, true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send();
+}
+function liberarGerencia(id){
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                //limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/cheques', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }
+            
+        }
+    };
+
+    xhttp.open('GET', 'cheques/gerencia/'+id, true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send();
 }

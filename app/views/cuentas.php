@@ -71,12 +71,12 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="cheque_inicial">Cheque Incial</label>
+                                                    <label for="cheque_inicial">Maximo sin autorizacion auditoria</label>
                                                     <input id="cheque_inicial" name="cheque_inicial" type="number" class="form-control" aria-describedby="cheque_inicial"
                                                     >
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="cheque_final">Cheque Final</label>
+                                                    <label for="cheque_final">Maximo sin autorizacion gerencia</label>
                                                     <input id="cheque_final" name="cheque_final" type="number" class="form-control" aria-describedby="cheque_final"
                                                     >
                                                 </div>

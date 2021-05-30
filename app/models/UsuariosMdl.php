@@ -54,7 +54,7 @@
 		}
 
 		public function crearUsuarios($nombre, $contra, $cui, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac, $grupo, $monto){
-			$this->db->query("SELECT usuario_crear(:nombre, :contra, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR'), :grupo, :monto) AS result FROM dual");
+			$this->db->query("SELECT usuario_crear(:nombre, :contra, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MON-RRRR'), :grupo, :monto) AS result FROM dual");
 			$this->db->bind(':nombre', $nombre);
 			$this->db->bind(':contra', $contra);
 			$this->db->bind(':cui', $cui);
@@ -70,7 +70,7 @@
 		}
 
 		public function guardarUsuario($nombre, $id, $contra, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac, $grupo, $monto){
-			$this->db->query("SELECT usuario_guardar(:nombre, :id, :contra, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR'), :grupo, :monto) AS result FROM dual");
+			$this->db->query("SELECT usuario_guardar(:nombre, :id, :contra, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MON-RRRR'), :grupo, :monto) AS result FROM dual");
 			$this->db->bind(':nombre', $nombre, PDO::PARAM_STR);
 			$this->db->bind(':id', $id);
 			$this->db->bind(':contra', $contra, PDO::PARAM_STR);
@@ -86,7 +86,7 @@
 		}
 
 		public function guardarModulos($usuario, $modulo){
-			$this->db->query("INSERT INTO usuarios_modulos (id_usuario, id_modulo)VALUES(:usuario, :modulo)");
+			$this->db->query("INSERT INTO usuarios_modulos SELECT :usuario, id_modulo FROM modulos WHERE asignable = 1 AND id_modulo = :modulo");
 			$this->db->bind(':usuario', $usuario);
 			$this->db->bind(':modulo', $modulo);
 			return $this->db->execute();
@@ -99,7 +99,7 @@
 		}
 
 		public function guardarPrivilegios($usuario, $privilegio){
-			$this->db->query("INSERT INTO usuarios_privilegios (id_privilegio, id_usuario)VALUES(:privilegio, :usuario)");
+			$this->db->query("INSERT INTO usuarios_privilegios SELECT id_privilegio, :usuario  FROM privilegios WHERE asignable = 1 AND id_privilegio = :privilegio");
 			$this->db->bind(':usuario', $usuario);
 			$this->db->bind(':privilegio', $privilegio);
 			return $this->db->execute();

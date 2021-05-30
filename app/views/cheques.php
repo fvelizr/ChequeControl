@@ -54,7 +54,7 @@
                                 <?php if(
                                     (
                                         (
-                                            ((($datos['ESTADO'] == 'Auditoria' && $datos['MONTO'] >= $datos['AUDITORIA']) 
+                                            ((($datos['ESTADO'] == 'Auditado' && $datos['MONTO'] >= $datos['AUDITORIA']) 
                                                 || ($datos['ESTADO'] == 'Creado' && ($datos['MONTO'] >= $datos['GERENCIA']))) 
                                             && $datos['MONTO'] < $datos['AUDITORIA'])
                                         )

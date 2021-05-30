@@ -53,7 +53,7 @@
 
 
         public function crearCheque($numero, $fecha, $tot, $cuen, $id_banco, $id_proveedor, $id_usuario, $nombre, $lugar){
-            $this->db->query("INSERT INTO cheques (numero, fecha, total, cuentas_bancarias, id_banco, id_proveedor, id_usuario, nombre, lugar)VALUES (:numero, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MM-RRRR'), :tot, :cuen, :id_banco, :id_proveedor, :id_usuario, :nombre, :lug)");
+            $this->db->query("INSERT INTO cheques (numero, fecha, total, cuentas_bancarias, id_banco, id_proveedor, id_usuario, nombre, lugar)VALUES (:numero, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MON-RRRR'), :tot, :cuen, :id_banco, :id_proveedor, :id_usuario, :nombre, :lug)");
             //$this->db->query('COMMIT');
             $this->db->bind(':numero', $numero);
             $this->db->bind(':lug', $lugar);
@@ -70,7 +70,7 @@
         
         public function guardarCheque($numero, $fecha, $tot, $cuen, $id_banco, $id_proveedor, $nombre){
             
-            $this->db->query("UPDATE cheques SET fecha = TO_CHAR(TO_DATE(:fec , 'RRRR-MM-DD'),'DD-MM-RRRR'), total = :tot, cuentas_bancarias = :cuen, id_banco = :banco, id_proveedor = :proveedor, nombre = :nom, estado = 'Creado' WHERE numero = :num");
+            $this->db->query("UPDATE cheques SET fecha = TO_CHAR(TO_DATE(:fec , 'RRRR-MM-DD'),'DD-MON-RRRR'), total = :tot, cuentas_bancarias = :cuen, id_banco = :banco, id_proveedor = :proveedor, nombre = :nom, estado = 'Creado' WHERE numero = :num");
             //$this->db->query('COMMIT');
             $this->db->bind(':num', $numero);
             $this->db->bind(':fec', $fecha);
@@ -87,7 +87,7 @@
 
         public function liberarAuditoria($id){
             $this->db->query("INSERT INTO autorizaciones_auditoria 
-            SELECT numero, cuentas_bancarias, id_banco, :usuario, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MM-RRRR'),  (SELECT (nvl(max(id_autorizacion),0)+1) FROM autorizaciones_auditoria) FROM cheques WHERE numero = :id");
+            SELECT numero, cuentas_bancarias, id_banco, :usuario, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MON-RRRR'),  (SELECT (nvl(max(id_autorizacion),0)+1) FROM autorizaciones_auditoria) FROM cheques WHERE numero = :id");
             $this->db->bind(':id', $id);
             $this->db->bind(':usuario', $_SESSION['id_usuario']);
             $this->db->bind(':fecha', date("Y").'-'.date("m").'-'.date("d"));
@@ -96,7 +96,7 @@
 
         public function liberarGerencia($id){
             $this->db->query("INSERT INTO autorizaciones_gerencia
-            SELECT numero, cuentas_bancarias, id_banco, :usuario, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MM-RRRR'),  (SELECT (nvl(max(id_autorizacion),0)+1) FROM autorizaciones_gerencia) FROM cheques WHERE numero = :id");
+            SELECT numero, cuentas_bancarias, id_banco, :usuario, TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MON-RRRR'),  (SELECT (nvl(max(id_autorizacion),0)+1) FROM autorizaciones_gerencia) FROM cheques WHERE numero = :id");
             $this->db->bind(':id', $id);
             $this->db->bind(':usuario', $_SESSION['id_usuario']);
             $this->db->bind(':fecha', date("Y").'-'.date("m").'-'.date("d"));
@@ -105,7 +105,7 @@
 
         public function correcciones($id, $cambios){
             $this->db->query("INSERT INTO correcciones
-            SELECT (SELECT (nvl(max(id_correccion),0)+1) FROM correcciones), TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MM-RRRR'), :cambios, :id, cuentas_bancarias, id_banco, :usuario FROM cheques WHERE numero = :id");
+            SELECT (SELECT (nvl(max(id_correccion),0)+1) FROM correcciones), TO_CHAR(TO_DATE(:fecha , 'RRRR-MM-DD'),'DD-MON-RRRR'), :cambios, :id, cuentas_bancarias, id_banco, :usuario FROM cheques WHERE numero = :id");
             $this->db->bind(':id', $id);
             $this->db->bind(':usuario', $_SESSION['id_usuario']);
             $this->db->bind(':fecha', date("Y").'-'.date("m").'-'.date("d"));

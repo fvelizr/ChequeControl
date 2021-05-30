@@ -21,7 +21,7 @@
 		}
 
 		public function crearUsuarios($nombre, $contra, $cui, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac, $grupo, $monto){
-			$this->db->query("SELECT usuario_crear(:nombre, :contra, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR'), :grupo, :monto) AS result FROM dual");
+			$this->db->query("SELECT usuario_crear(:nombre, :contra, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MON-RRRR'), :grupo, :monto) AS result FROM dual");
 			$this->db->bind(':nombre', $nombre);
 			$this->db->bind(':contra', $contra);
 			$this->db->bind(':cui', $cui);
@@ -37,7 +37,7 @@
 		}
 
 		public function guardarProveedor($proveedor, $nit, $cui, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac){
-			$this->db->query("SELECT proveedor_guardar(:proveedor, :nit, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR')) AS result FROM dual");
+			$this->db->query("SELECT proveedor_guardar(:proveedor, :nit, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MON-RRRR')) AS result FROM dual");
 			$this->db->bind(':proveedor', $proveedor);
 			$this->db->bind(':nit', $nit);
 			$this->db->bind(':cui', $cui);
@@ -51,7 +51,7 @@
 		}
 
 		public function crearProveedor($proveedor, $nit, $cui, $nombre1, $nombre2, $nombre3, $apellido1, $apellido2, $fechanac){
-			$this->db->query("SELECT proveedor_crear(:proveedor, :nit, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MM-RRRR')) AS result FROM dual");
+			$this->db->query("SELECT proveedor_crear(:proveedor, :nit, :cui, :nombre1, :nombre2, :nombre3, :apellido1, :apellido2, TO_CHAR(TO_DATE(:fechanac, 'RRRR-MM-DD'),'DD-MON-RRRR')) AS result FROM dual");
 			$this->db->bind(':proveedor', $proveedor);
 			$this->db->bind(':nit', $nit);
 			$this->db->bind(':cui', $cui);

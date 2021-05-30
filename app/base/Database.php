@@ -34,6 +34,8 @@
 	        // Create a new PDO instanace
 	        try{
 	            $this->dbh = new PDO($dsn, $config->get('username'), $config->get('password'), $options);
+				$this->query("ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MM-RRRR'");
+				$this->execute();
 				//return '<script>console.log("conexion exitosa");';
 	        }
 	        // Catch any errors

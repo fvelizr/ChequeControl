@@ -47,7 +47,7 @@ session_start();
  * Asigna la zona horaria predeterminada del servidor
  */
 
-date_default_timezone_set('UTC');
+date_default_timezone_set('America/Guatemala');
 
 return $config;
 ?>

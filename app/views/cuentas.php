@@ -10,9 +10,11 @@
             <h3 class="d-flex justify-content-center">LISTADO DE CUENTAS BANCARIAS</h3>
             <br />
             <div class="w-100 d-flex justify-content-left">
+            <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 1030201)['PRIV'] > 0){ ?>
                 <button type="button" class="btn btn-success w-10" data-toggle="modal" onclick="frmCuentas()">
                     <i class="bi bi-plus-circle-fill"></i>
                 </button>
+            <?php } ?>
             </div>
             <table class="table">
                 <thead class="thead-light">
@@ -32,10 +34,12 @@
                             <td><?php echo $datos['NOMBRE']; ?></td>
                             <td><?php echo 'Activo'; ?></td>
                             <td>
+                            <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 1030202)['PRIV'] > 0){ ?>
                                 <button type="button" class="btn btn-primary btn-lg active w-auto"
                                     style="font-size:11px" data-toggle="modal" onclick="cuentaEnForm(<?php echo $datos['NUMERO']; ?>)">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
+                            <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

@@ -19,6 +19,7 @@
 			require($this->config->get('modelsDir').'UsuariosMdl.php');
 			$UsuarioMdl = new UsuariosMdl($this->config);
 
+            $this->view->usr = $UsuarioMdl;
 			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->cuentas = $this->model->obtenerCuentas();
 			$this->view->bancos = $this->model->obtenerBancos();

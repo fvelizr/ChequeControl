@@ -285,5 +285,20 @@
             }
             return json_encode($res);
 		}
+        public function imprimirCheque($id){
+            
+            $impreso = $this->model->chequeImpreso($id);
+            if($impreso) $Liberacion = $this->model->actualizarEstado($id, 'Impreso');
+			$this->view->cheques = $this->model->obtenerChequeImp($id);
+            $this->view->contenido = $this->view->render($this->config->get('viewsDir').'chequeImp.php');
+            echo $this->view->render($this->config->get('viewsDir').'header.php');
+        }
+
+        public function entregarCheque($id){
+            $Liberacion = $this->model->actualizarEstado($id, 'Entregado');
+			$this->view->cheques = $this->model->obtenerChequeImp($id);
+            $this->view->contenido = $this->view->render($this->config->get('viewsDir').'chequeImp.php');
+            echo $this->view->render($this->config->get('viewsDir').'header.php');
+        }
     }
  ?>

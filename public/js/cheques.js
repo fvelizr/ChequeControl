@@ -196,3 +196,48 @@ function liberarGerencia(id){
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
 }
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
+function imprimirCheque(id){
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var ventana = window.open('', 'PRINT', 'height=400,width=600');
+            ventana.document.write(this.responseText);
+            ventana.document.close();
+            ventana.focus();
+            ventana.print();
+            //ventana.close();
+            return true;
+
+            /*var res = JSON.parse(this.responseText);
+            console.log(res);
+            if(res.codigo == 200){
+                //limpiarFrmUsuario();
+                alert(res.codigo+': '+res.mensaje);
+                setTimeout(location.href = '/cheques', 10000);
+            }else{
+                alert('ERROR '+res.codigo+': '+res.mensaje);
+            }*/
+            
+        }
+    };
+
+    xhttp.open('GET', 'cheques/impresion/'+id, true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send();
+}

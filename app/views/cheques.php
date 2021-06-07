@@ -1,17 +1,17 @@
 <div class="col">
     <div class='row'>
         <br /><br /><br />
-        <div class='col-md-3'>
 
-        </div>
-        <div class='col-md-6'>
+        <div class='col-md-12'>
             
             <h3 class="d-flex justify-content-center">LISTADO DE CHEQUES</h3>
             <br />
             <div class="w-100 d-flex justify-content-left">
+            <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10401)['PRIV'] > 0){ ?>
                 <button type="button" class="btn btn-success w-10" data-toggle="modal" onclick="frmCheques()">
                     <i class="bi bi-plus-circle-fill"></i>
                 </button>
+            <?php } ?>
             </div>
             <table class="table">
                 <thead class="thead-light">
@@ -27,7 +27,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <script>console.log(<?php echo $Cheques; ?>);</script>
                     <?php foreach($Cheques as $datos) { ?>
                         <tr>
                             <th scope="row"><?php echo $datos['NUMERO']; ?></th>
@@ -38,29 +37,31 @@
                             <td><?php echo $datos['ESTADO']; ?></td>
                             <td>
                                 <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10402)['PRIV'] > 0){ ?>
-                                <button type="button" class="btn btn-success btn-lg active w-auto"
-                                    style="font-size:11px" data-toggle="modal" onclick="ChequeEnForm(<?php echo $datos['NUMERO']; ?>)">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
+                                    <button type="button" class="btn btn-success btn-lg active w-auto"
+                                        style="font-size:11px" onclick="ChequeEnForm(<?php echo $datos['NUMERO']; ?>)">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
                                 <?php } ?>
                                 <?php if($datos['ESTADO'] == 'Creado' && $datos['MONTO'] >= $datos['AUDITORIA']
                                     && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1050100)['PRIV'] > 0){ ?>
                                     
-                                <button type="button" class="btn btn-success btn-lg active w-auto"
-                                    style="font-size:11px" data-toggle="modal" onclick="liberarAuditoria(<?php echo $datos['NUMERO']; ?>)">
-                                    <i class="bi bi-file-earmark-break-fill"></i>
-                                </button>
+                                    <button type="button" class="btn btn-success btn-lg active w-auto"
+                                        style="font-size:11px" onclick="liberarAuditoria(<?php echo $datos['NUMERO']; ?>)">
+                                        <i class="bi bi-file-earmark-break-fill"></i>
+                                    </button>
                                 <?php } ?>
                                 <?php if(
                                     (
+                                        
                                         (
-                                            ((($datos['ESTADO'] == 'Auditado' && $datos['MONTO'] >= $datos['AUDITORIA']) 
-                                                || ($datos['ESTADO'] == 'Creado' && ($datos['MONTO'] >= $datos['GERENCIA']))) 
-                                            && $datos['MONTO'] < $datos['AUDITORIA'])
+                                            (($datos['ESTADO'] == 'Auditado' && $datos['MONTO'] >= $datos['AUDITORIA'])) 
+                                            || 
+                                            ($datos['ESTADO'] == 'Creado' && $datos['MONTO'] >= $datos['GERENCIA'] && $datos['MONTO'] < $datos['AUDITORIA'])
                                         )
+                                        
                                     ) && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1060100)['PRIV'] > 0){ ?>
                                 <button type="button" class="btn btn-success btn-lg active w-auto"
-                                    style="font-size:11px" data-toggle="modal" onclick="liberarGerencia(<?php echo $datos['NUMERO']; ?>)">
+                                    style="font-size:11px" onclick="liberarGerencia(<?php echo $datos['NUMERO']; ?>)">
                                     <i class="bi bi-award-fill"></i>
                                 </button>
                                 <?php } ?>
@@ -70,13 +71,13 @@
                                         ($datos['ESTADO'] == 'Creado' && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1070100)['PRIV'] > 0 && $datos['MONTO'] < $datos['AUDITORIA'] && $datos['MONTO'] < $datos['GERENCIA'])
                                     ){ ?>
                                 <button type="button" class="btn btn-success btn-lg active w-auto"
-                                    style="font-size:11px" data-toggle="modal" onclick="imprimirCheque(<?php echo $datos['NUMERO']; ?>)">
+                                    style="font-size:11px" onclick="imprimirCheque(<?php echo $datos['NUMERO']; ?>)">
                                     <i class="bi bi-printer-fill"></i>
                                 </button>
                                 <?php } ?>
                                 <?php if($datos['ESTADO'] == 'Entregado'  && $usr->obtenerPrivilegio($_SESSION['id_usuario'], 1080100)['PRIV'] > 0){ ?>
                                 <button type="button" class="btn btn-success btn-lg active w-auto"
-                                    style="font-size:11px" data-toggle="modal" onclick="entregarCheque(<?php echo $datos['NUMERO']; ?>)">
+                                    style="font-size:11px" onclick="entregarCheque(<?php echo $datos['NUMERO']; ?>)">
                                     <i class="bi bi-mailbox2"></i>
                                 </button>
                                 <?php } ?>
@@ -163,9 +164,6 @@
                     </div>
                 </tbody>
             </table>
-        </div>
-        <div class='col-md-3'>
-
         </div>
     </div>
 </div>

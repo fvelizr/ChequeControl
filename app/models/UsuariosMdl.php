@@ -35,7 +35,8 @@
 				((SELECT id_privilegio FROM usuarios_privilegios WHERE id_usuario = :id)
 				UNION
 				(SELECT id_privilegio FROM grupos_privilegios WHERE id_grupo = (SELECT id_grupo FROM usuarios WHERE id_usuario = :id))) b
-			ON a.id_privilegio = b.id_privilegio ORDER BY a.id_privilegio");
+			ON a.id_privilegio = b.id_privilegio 
+			WHERE a.asignable = 1 ORDER BY a.id_privilegio");
 			$this->db->bind(':id', $id);
 			$datos['privilegios']  = $this->db->resultSet();
 			return $datos;

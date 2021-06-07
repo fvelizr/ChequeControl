@@ -16,6 +16,7 @@
 			$UsuarioMdl = new UsuariosMdl($this->config);
 			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->contenido = $this->view->render($this->config->get('viewsDir').'menu.php');
+			$this->view->contenido .= $this->view->render($this->config->get('viewsDir').'inicio.php');
 			echo $this->view->render($this->config->get('viewsDir').'header.php');
 		}
 	}

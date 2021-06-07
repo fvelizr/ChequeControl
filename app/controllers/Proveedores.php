@@ -20,6 +20,7 @@
 			require($this->config->get('modelsDir').'ProveedoresMdl.php');
 			$ProveedorMdl = new ProveedoresMdl($this->config);
 
+			$this->view->usr = $UsuarioMdl;
 			$this->view->modulos = $UsuarioMdl->obtenerModulos($_SESSION['id_usuario']);
 			$this->view->proveedores = $ProveedorMdl->obtenerProveedores();
 			//$this->view->grupos = $ProveedorMdl->obtenerGrupos();

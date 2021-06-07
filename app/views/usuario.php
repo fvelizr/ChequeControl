@@ -10,9 +10,11 @@
             <h3 class="d-flex justify-content-center">LISTADO DE USUARIOS</h3>
             <br />
             <div class="w-100 d-flex justify-content-left">
+                <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10101)['PRIV'] > 0){ ?>
                 <button type="button" class="btn btn-success w-10" data-toggle="modal" onclick="frmUsuario()">
                     <i class="bi bi-plus-circle-fill"></i>
                 </button>
+                <?php } ?>
             </div>
             <table class="table">
                 <thead class="thead-light">
@@ -37,16 +39,20 @@
                             <td><?php echo 'Activo'; ?></td>
                             <td><?php echo $datos['FECHA_CREACION']; ?></td>
                             <td>
+                            <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10102)['PRIV'] > 0){ ?>
                                 <button type="button" class="btn btn-primary btn-lg active w-auto"
                                     style="font-size:11px" data-toggle="modal" onclick="usuarioEnForm(<?php echo $datos['ID_USUARIO']; ?>)">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
+                            <?php } ?>
+                            <?php if($usr->obtenerPrivilegio($_SESSION['id_usuario'], 10103)['PRIV'] > 0){ ?>
                                 <?php if($datos['ID_USUARIO'] != $_SESSION['id_usuario'] || $_SESSION['id_usuario'] != 1){ ?>
                                 <button type="button" class="btn btn-danger btn-lg active w-auto"
                                     style="font-size:11px" data-toggle="modal" data-target="#modal_usuario_elim" onclick="eliminarUsuario(<?php echo $datos['ID_USUARIO']; ?>)">
                                     <i class="bi bi-trash-fill"></i>
                                 </button>
                                 <?php } ?>
+                            <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

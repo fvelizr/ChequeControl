@@ -1,3 +1,9 @@
+# Aplicacion desarrollada por:
+  # Edmundo Abraham Guerrero Morataya
+  # Emely Andrea Espinoza Pérez
+  # Erick Alberto Velásquez Castillo
+  # Felipe Inocencio Veliz Rabanales
+
 # Plantilla Base MVC
 
 Esta plantilla es el modelo básico de programación MVC(Modelo Vista Controlador),
@@ -31,24 +37,26 @@ Buscamos en nuestro archivo la siguiente linea y le quitamos el simbolo #
 
 
 ```sh
-<VirtualHost *:80>
+#Virtual Host agregado para el proyecto de base de datos
+<VirtualHost *:8080>
         #nombre del host de la máquina virtual
         #Agregar la dirección "127.0.0.1  mvc.dev" en el archivo /etc/hosts
         #o realizar la configuración como deseen
-        ServerName mvc.dev
+        ServerName chequecontrol.com
 
         ServerAdmin webmaster@localhost
         #Document Root y Directory deben apuntar con la dirección total a la 
         #carpeta public dentro de mvc
-        #Cambiar la /var/www/html/mvc/public por la direccion de su servidor 
-        DocumentRoot /var/www/html/mvc/public 
-        <Directory /var/www/html/mvc/public>
+        DocumentRoot C:/AppServ/www/ChequeControl/public
+        <Directory C:/AppServ/www/ChequeControl/public>	
                 Allow from all
                 Order allow,deny
                 Options Indexes Multiviews FollowSymLinks
                 AllowOverride ALL
+		Require all granted
         </Directory>
 </VirtualHost>
+
 ```
 Hacer este paso si usan linux: Root activamos el módulo modrewrite y la página
 ```sh
@@ -65,78 +73,4 @@ Si tuvieron problemas con la instalación es posible lanzar un servidor directam
 $ php -S localhost:8080
 ```
 Luego para acceder a su proyecto ingresan a la url http://localhost:8080 , No se olviden de agregar esa dirección en la configuración de su proyecto.
-
-### La base de datos
-La base de datos de ejemplo es la siguiente:
-```sh
--- phpMyAdmin SQL Dump
--- version 4.2.12deb2+deb8u1
--- http://www.phpmyadmin.net
---
--- Servidor: localhost
--- Tiempo de generación: 03-06-2016 a las 20:57:30
--- Versión del servidor: 5.5.49-0+deb8u1
--- Versión de PHP: 5.6.20-0+deb8u1
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- Base de datos: `tabla`
---
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tabla`
---
-
-CREATE TABLE  tabla (
-id int NOT NULL,
-  nombre varchar(55) NOT NULL
-);
-
---
--- Volcado de datos para la tabla `tabla`
---
-
-INSERT INTO tabla (id, nombre) VALUES
-(1, 'hola');
-INSERT INTO tabla (id, nombre) VALUES(2, 'mundo');
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `tabla`
---
-ALTER TABLE `tabla`
- ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `tabla`
---
-ALTER TABLE `tabla`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 ```
-
-### Comentarios
-El código tiene varios comentarios para facilitar el entendimiento de este.
-
-Para cualquier consulta o comentario escribir a [hector.alvarez@linux.com](mailto:hector.alvarez@linux.com)
-
-Ejemplo desarrollado por Héctor Álvarez.
